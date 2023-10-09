@@ -1,7 +1,7 @@
 import React from 'react'
 import './Footer.css'
 import './Styles.css'
-import Logo from '../images/ktgames_logo.png';
+import Logo from '../images/ktgame_logo.png';
 import { Link } from 'react-router-dom';
 import {FacebookOutlined, YoutubeOutlined, GithubOutlined} from '@ant-design/icons';
 
