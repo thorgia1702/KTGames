@@ -81,13 +81,9 @@ export default function SignUp() {
         <button disabled={loading || !formData.username || !formData.email || !formData.password} className='submitbutton'>
           {loading ? 'LOADING...' : 'SIGN UP'}
         </button>
-        
+
         <p className="login-register-guide">Already have an account? <a href="/sign-in">Login here!</a></p>
       </form>
-
-
-
-
     </div>
   )
 }
