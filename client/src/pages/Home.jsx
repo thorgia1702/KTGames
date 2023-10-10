@@ -101,7 +101,7 @@ export default function Home() {
         <div className="mySlides fade">
           <div className="numbertext">1 / 5</div>
           <img src={Lol} alt="chess" height={350} width={650} />
-          <p class='newstitle'>League of legends</p>
+          <p className='newstitle'>League of legends</p>
         </div>
 
         <div className="mySlides fade">
