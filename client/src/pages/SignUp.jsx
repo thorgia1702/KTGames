@@ -9,7 +9,7 @@ export default function SignUp() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate();
 
-  const handleChange = (e) =>{
+  const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
@@ -29,7 +29,7 @@ export default function SignUp() {
       });
       const data = await res.json();
       console.log(data);
-      if(data.success === false) {
+      if (data.success === false) {
         setLoading(false);
         setError(data.message);
         return;
@@ -46,7 +46,7 @@ export default function SignUp() {
   return (
     <div>
       <h1>Sign Up</h1>
-      {error && <Alert className='alert_message' message={error} type="warning" showIcon/>}
+      {error && <Alert className='alert_message' message={error} type="warning" showIcon />}
       <form onSubmit={handleSubmit} className="registerform">
         <div className="form-group">
           <label htmlFor="name">Name</label>
@@ -78,12 +78,15 @@ export default function SignUp() {
           />
         </div>
 
-        <button disabled={loading} className='submitbutton'>{loading? 'LOADING...' : 'SIGN UP'}</button>
+        <button disabled={loading || !formData.username || !formData.email || !formData.password} className='submitbutton'>
+          {loading ? 'LOADING...' : 'SIGN UP'}
+        </button>
+        
         <p className="login-register-guide">Already have an account? <a href="/sign-in">Login here!</a></p>
       </form>
 
-      
-      
+
+
 
     </div>
   )
