@@ -1,54 +1,63 @@
-import React, { useState } from 'react'
-import './pages.css'
-import { notification, Alert, Space } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "./pages.css";
+import { notification, Alert, Space } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInFailure,
+  signInSuccess,
+  signInStart,
+} from "../redux/user/userSlice";
 
 export default function SignIn() {
-  const [formData, setFormData] = useState({})
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({});
+  const { loading, error } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      const res = await fetch('/api/auth/signin', {
-        method: 'POST',
+      dispatch(signInStart());
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
       console.log(data);
       if (data.success === false) {
-        setLoading(false);
-        setError(data.message);
+        dispatch(signInFailure(data.message));
         return;
       }
-      setLoading(false);
-      setError(null);
-      navigate('/');
+      dispatch(signInSuccess(data));
+      navigate("/");
     } catch (error) {
-      setLoading(false)
-      setError(error.message)
+      dispatch(signInFailure(error.message));
     }
   };
 
   return (
     <div>
       <h1>Sign In</h1>
-      {error && <Alert className='alert_message' message={error} type="warning" showIcon />}
+      {error && (
+        <Alert
+          className="alert_message"
+          message={error}
+          type="warning"
+          showIcon
+        />
+      )}
       <form onSubmit={handleSubmit} className="registerform">
-
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -69,12 +78,17 @@ export default function SignIn() {
           />
         </div>
 
-        <button disabled={loading || !formData.email || !formData.password} className='submitbutton'>
-          {loading ? 'LOADING...' : 'SIGN IN'}
+        <button
+          disabled={loading || !formData.email || !formData.password}
+          className="submitbutton"
+        >
+          {loading ? "LOADING..." : "SIGN IN"}
         </button>
 
-        <p className="login-register-guide">Don't have an account? <a href="/sign-up">Register here!</a></p>      
+        <p className="login-register-guide">
+          Don't have an account? <a href="/sign-up">Register here!</a>
+        </p>
       </form>
     </div>
-  )
+  );
 }
