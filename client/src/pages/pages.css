@@ -191,3 +191,8 @@ h1{
   margin-left: auto;
   margin-right: auto;
 }
+
+.text_box{
+  height:25px;
+  font-size: 14px;
+}

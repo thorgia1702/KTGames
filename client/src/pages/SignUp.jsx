@@ -1,29 +1,30 @@
-import React, { useState } from 'react'
-import './pages.css'
-import { notification, Alert, Space } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import "./pages.css";
+import { notification, Alert, Space } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import Oauth from "../components/Oauth";
 
 export default function SignUp() {
-  const [formData, setFormData] = useState({})
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    })
-  }
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       setLoading(true);
-      const res = await fetch('/api/auth/signup', {
-        method: 'POST',
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
@@ -36,21 +37,29 @@ export default function SignUp() {
       }
       setLoading(false);
       setError(null);
-      navigate('/sign-in');
+      navigate("/sign-in");
     } catch (error) {
-      setLoading(false)
-      setError(error.message)
+      setLoading(false);
+      setError(error.message);
     }
   };
 
   return (
     <div>
       <h1>Sign Up</h1>
-      {error && <Alert className='alert_message' message={error} type="warning" showIcon />}
+      {error && (
+        <Alert
+          className="alert_message"
+          message={error}
+          type="warning"
+          showIcon
+        />
+      )}
       <form onSubmit={handleSubmit} className="registerform">
         <div className="form-group">
           <label htmlFor="name">Name</label>
           <input
+            className="text_box"
             type="text"
             id="username"
             placeholder="Enter your name"
@@ -61,6 +70,7 @@ export default function SignUp() {
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
+            className="text_box"
             type="email"
             id="email"
             placeholder="Enter your email"
@@ -71,6 +81,7 @@ export default function SignUp() {
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
+            className="text_box"
             type="password"
             id="password"
             placeholder="Enter your password"
@@ -78,12 +89,24 @@ export default function SignUp() {
           />
         </div>
 
-        <button disabled={loading || !formData.username || !formData.email || !formData.password} className='submitbutton'>
-          {loading ? 'LOADING...' : 'SIGN UP'}
+        <button
+          disabled={
+            loading ||
+            !formData.username ||
+            !formData.email ||
+            !formData.password
+          }
+          className="submitbutton"
+        >
+          {loading ? "LOADING..." : "SIGN UP"}
         </button>
 
-        <p className="login-register-guide">Already have an account? <a href="/sign-in">Login here!</a></p>
+        <Oauth />
+
+        <p className="login-register-guide">
+          Already have an account? <a href="/sign-in">Login here!</a>
+        </p>
       </form>
     </div>
-  )
+  );
 }

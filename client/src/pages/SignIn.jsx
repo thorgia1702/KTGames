@@ -8,6 +8,7 @@ import {
   signInSuccess,
   signInStart,
 } from "../redux/user/userSlice";
+import Oauth from "../components/Oauth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -60,7 +61,8 @@ export default function SignIn() {
       <form onSubmit={handleSubmit} className="registerform">
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input
+          <input 
+            className="text_box"
             type="email"
             id="email"
             placeholder="Enter your email"
@@ -71,6 +73,7 @@ export default function SignIn() {
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
+            className="text_box"
             type="password"
             id="password"
             placeholder="Enter your password"
@@ -84,6 +87,8 @@ export default function SignIn() {
         >
           {loading ? "LOADING..." : "SIGN IN"}
         </button>
+
+        <Oauth/>
 
         <p className="login-register-guide">
           Don't have an account? <a href="/sign-up">Register here!</a>
