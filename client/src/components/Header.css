@@ -1,73 +1,90 @@
 .header {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: #333;
-    color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    padding: 10px 0; /* Adjust padding as needed */
-    margin: 0;
-    position: relative;
-    position: sticky;
-    top: 0;
-  }
-  
-  .sidebar-toggle {
-    display: flex;
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    transition: color 0.3s ease;
-  }
-  
-  .mini-logo-container{
-    margin-top: 130px;
-    display: inline-block;
-    text-align: center;
-  }
-
-  .logo-container {
-    flex-grow: 1; /* Allow the logo container to take up available space */
-    text-align: center; /* Center the logo horizontally */
-  }
-  
-  .logo {
-    height: 120px;
-    display: inline-block; /* Ensure the logo stays in line with the text */
-    vertical-align: middle; /* Vertically center the logo within the container */
-  }
-
-  .unfold-button {
-    display: flex;
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    transition: color 0.3s ease;
-    margin-left: 50px;
-  }
-  .fold-button {
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    transition: color 0.3s ease;
-    position: absolute;
-    top: 20px; /* Adjust the top positioning as needed */
-    right: 20px; /* Adjust the right positioning as needed */
-    margin-top: 25px;
-  }
-
-.navbutton{
-    border-radius: 10px;
-    width: 260px;
-    text-align: center;
-    height: 50px;
-    font-size: 20px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #333;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  padding: 10px 0;
+  /* Adjust padding as needed */
+  margin: 0;
+  position: relative;
+  position: sticky;
+  top: 0;
 }
 
-.sidenav{
-    margin-top:50px;
+.sidebar-toggle {
+  display: flex;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.mini-logo-container {
+  margin-top: 130px;
+  display: inline-block;
+  text-align: center;
+}
+
+.logo-container {
+  flex-grow: 1;
+  /* Allow the logo container to take up available space */
+  text-align: center;
+  /* Center the logo horizontally */
+}
+
+.logo {
+  height: 120px;
+  display: inline-block;
+  /* Ensure the logo stays in line with the text */
+  vertical-align: middle;
+  /* Vertically center the logo within the container */
+}
+
+.unfold-button {
+  display: flex;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.3s ease;
+  margin-left: 50px;
+}
+
+.fold-button {
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.3s ease;
+  position: absolute;
+  top: 20px;
+  /* Adjust the top positioning as needed */
+  right: 20px;
+  /* Adjust the right positioning as needed */
+  margin-top: 25px;
+}
+
+.navbutton {
+  border-radius: 10px;
+  width: 260px;
+  text-align: center;
+  height: 50px;
+  font-size: 20px;
+}
+
+.sign {
+  border-radius: 10px;
+  width: 260px;
+  text-align: center;
+  height: 50px;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.sidenav {
+  margin-top: 50px;
 }
 
 .sidebar-toggle.active .bar:nth-child(1) {
@@ -117,82 +134,84 @@
 
 /* Styles for the Right Sidebar */
 .profile-sidebar {
-    position: fixed;
-    top: 0;
-    right: -300px; /* Initially hidden on the right side */
-    height: 100%;
-    width: 300px;
-    background-color: #222;
-    z-index: 2;
-    transition: right 0.3s ease;
-    overflow-y: auto;
-    padding-top: 60px;
-    color: #fff;
-  }
-  
-  .profile-sidebar.visible {
-    right: 0; /* Display the sidebar when 'visible' class is applied */
-  }
-  
-  .profile-fold-button {
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    z-index: 1;
-    margin-top: 24px;
-  }
-  
-  .profile-logo-container {
-    text-align: center;
-    margin-bottom: 50px;
-    margin-top: 60px;
-  }
-  
-  .profile-logo {
-    display: inline-block;
-    vertical-align: middle;
-    height: 90px;
-    width: 230px;
-  }
-  
-  .profile-sidenav {
-    list-style-type: none;
-    padding: 0;
-    text-align: center;
-  }
-  
-  .profile-sidenav li {
-    margin: 20px;
-    font-size: 18px;
-  }
-  
-  /* Button for Toggling Profile Sidebar */
-  .profile-toggle-button {
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 3;
-  }
-  
-  .profile-unfold-button{
-    margin-right: 50px;
-    display: flex;
-    font-size: 24px;
-    cursor: pointer;
-    color: #fff;
-    transition: color 0.3s ease;
-  }
+  position: fixed;
+  top: 0;
+  right: -300px;
+  /* Initially hidden on the right side */
+  height: 100%;
+  width: 300px;
+  background-color: #222;
+  z-index: 2;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+  padding-top: 60px;
+  color: #fff;
+}
 
-  .avatar{
-    display: inline-block;
-    vertical-align: middle;
-    height: 120px;
-    width: 120px;
-    border-radius: 100px;
-  }
+.profile-sidebar.visible {
+  right: 0;
+  /* Display the sidebar when 'visible' class is applied */
+}
+
+.profile-fold-button {
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1;
+  margin-top: 24px;
+}
+
+.profile-logo-container {
+  text-align: center;
+  margin-bottom: 50px;
+  margin-top: 60px;
+}
+
+.profile-logo {
+  display: inline-block;
+  vertical-align: middle;
+  height: 90px;
+  width: 230px;
+}
+
+.profile-sidenav {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.profile-sidenav li {
+  margin: 20px;
+  font-size: 18px;
+}
+
+/* Button for Toggling Profile Sidebar */
+.profile-toggle-button {
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 3;
+}
+
+.profile-unfold-button {
+  margin-right: 50px;
+  display: flex;
+  font-size: 24px;
+  cursor: pointer;
+  color: #fff;
+  transition: color 0.3s ease;
+}
+
+.avatar {
+  display: inline-block;
+  vertical-align: middle;
+  height: 120px;
+  width: 120px;
+  border-radius: 100px;
+}

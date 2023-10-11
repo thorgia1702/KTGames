@@ -112,38 +112,44 @@ export default function Header() {
         <div className="profile-fold-button" onClick={toggleProfileSidebar}>
           {profileSidebarVisible ? <CloseOutlined /> : <UserOutlined />}
         </div>
-        <div className="profile-logo-container">
-          <a href="/">
-            <img
-              className="profile-logo"
-              src={Logo}
-              alt="Logo"
-              height={90}
-              width={230}
-            />
-          </a>
-        </div>
-
+        {currentUser ? (
+          <></>
+        ) : (
+          <div className="profile-logo-container">
+            <a href="/">
+              <img
+                className="profile-logo"
+                src={Logo}
+                alt="Logo"
+                height={90}
+                width={230}
+              />
+            </a>
+          </div>
+        )}
 
         <ul className="profile-sidenav">
-
           <Link to="/profile">
             {currentUser ? (
               <div className="profile-logo-container">
-              <img src={currentUser.avatar} alt="profile" className="avatar"/>
+                <img
+                  src={currentUser.avatar}
+                  alt="profile"
+                  className="avatar"
+                />
               </div>
             ) : (
-              
-              <button className="navbutton">Sign in</button>
+              <button className="sign">Sign in</button>
             )}
           </Link>
 
-
-          <li>
-            <Link to="/sign-up">
-              <button className="navbutton">Sign up</button>
-            </Link>
-          </li>
+          <Link to="/sign-up">
+            {currentUser ? (
+              <h1></h1>
+            ) : (
+              <button className="sign">Sign up</button>
+            )}
+          </Link>
         </ul>
       </div>
     </div>
