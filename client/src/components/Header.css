@@ -59,9 +59,11 @@
   }
 
 .navbutton{
-    border-radius: 0px;
+    border-radius: 10px;
     width: 260px;
     text-align: center;
+    height: 50px;
+    font-size: 20px;
 }
 
 .sidenav{
@@ -159,6 +161,7 @@
   .profile-sidenav {
     list-style-type: none;
     padding: 0;
+    text-align: center;
   }
   
   .profile-sidenav li {
@@ -184,4 +187,12 @@
     cursor: pointer;
     color: #fff;
     transition: color 0.3s ease;
+  }
+
+  .avatar{
+    display: inline-block;
+    vertical-align: middle;
+    height: 120px;
+    width: 120px;
+    border-radius: 100px;
   }

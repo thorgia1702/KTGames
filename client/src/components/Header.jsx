@@ -1,11 +1,18 @@
-import './Header.css';
-import './Styles.css';
-import { Link } from 'react-router-dom';
-import Logo from '../images/ktgame_logo.png';
-import React, { useState } from 'react';
-import { MenuUnfoldOutlined, MenuFoldOutlined, UserOutlined, CloseOutlined } from '@ant-design/icons';
+import "./Header.css";
+import "./Styles.css";
+import { Link } from "react-router-dom";
+import Logo from "../images/ktgame_logo.png";
+import React, { useState } from "react";
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+  CloseOutlined,
+} from "@ant-design/icons";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+  const { currentUser } = useSelector((state) => state.user);
   const [navSidebarVisible, setNavSidebarVisible] = useState(false);
   const [profileSidebarVisible, setProfileSidebarVisible] = useState(false);
 
@@ -18,7 +25,11 @@ export default function Header() {
   };
 
   return (
-    <div className={`header ${navSidebarVisible || profileSidebarVisible ? 'sidebar-open' : ''}`}>
+    <div
+      className={`header ${
+        navSidebarVisible || profileSidebarVisible ? "sidebar-open" : ""
+      }`}
+    >
       {/* Unfold Button for Navigation Sidebar (Outside Sidebar) */}
       <div className="unfold-button" onClick={toggleNavSidebar}>
         {navSidebarVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
@@ -27,49 +38,61 @@ export default function Header() {
       {/* Logo */}
       <div className="logo-container">
         <Link to="/">
-          <img className="logo" src={Logo} alt="Logo" height={120} width={380} />
+          <img
+            className="logo"
+            src={Logo}
+            alt="Logo"
+            height={120}
+            width={380}
+          />
         </Link>
       </div>
 
       {/* Left Sidebar (Navigation) */}
-      <div className={`sidebar ${navSidebarVisible ? 'visible' : ''}`}>
+      <div className={`sidebar ${navSidebarVisible ? "visible" : ""}`}>
         {/* Fold Button for Navigation Sidebar (Inside Sidebar, Top Right) */}
         <div className="fold-button" onClick={toggleNavSidebar}>
           {navSidebarVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
         </div>
         <div className="mini-logo-container">
           <a href="/">
-            <img className="logo" src={Logo} alt="Logo" height={90} width={230} />
+            <img
+              className="logo"
+              src={Logo}
+              alt="Logo"
+              height={90}
+              width={230}
+            />
           </a>
         </div>
-        <ul className='sidenav'>
+        <ul className="sidenav">
           <li>
             <a href="/">
               <button className="navbutton">Home</button>
             </a>
           </li>
           <li>
-            <a href='/dashboard'>
+            <a href="/dashboard">
               <button className="navbutton">Dashboard</button>
             </a>
           </li>
           <li>
-            <a href='/chess'>
+            <a href="/chess">
               <button className="navbutton">Chess</button>
             </a>
           </li>
           <li>
-            <a href='/tic_tac_toe'>
+            <a href="/tic_tac_toe">
               <button className="navbutton">Tic tac toe</button>
             </a>
           </li>
           <li>
-            <a href='/battleship'>
+            <a href="/battleship">
               <button className="navbutton">Battle ship</button>
             </a>
           </li>
           <li>
-            <a href='/bingo'>
+            <a href="/bingo">
               <button className="navbutton">Bingo</button>
             </a>
           </li>
@@ -82,24 +105,42 @@ export default function Header() {
       </div>
 
       {/* Right Sidebar (Profile) */}
-      <div className={`profile-sidebar ${profileSidebarVisible ? 'visible' : ''}`}>
+      <div
+        className={`profile-sidebar ${profileSidebarVisible ? "visible" : ""}`}
+      >
         {/* Fold Button for Profile Sidebar (Inside Sidebar, Top Left) */}
         <div className="profile-fold-button" onClick={toggleProfileSidebar}>
           {profileSidebarVisible ? <CloseOutlined /> : <UserOutlined />}
         </div>
         <div className="profile-logo-container">
           <a href="/">
-            <img className="profile-logo" src={Logo} alt="Logo" height={90} width={230} />
+            <img
+              className="profile-logo"
+              src={Logo}
+              alt="Logo"
+              height={90}
+              width={230}
+            />
           </a>
         </div>
-        <ul className='profile-sidenav'>
-          <li>
-            <Link to='/sign-in'>
+
+
+        <ul className="profile-sidenav">
+
+          <Link to="/profile">
+            {currentUser ? (
+              <div className="profile-logo-container">
+              <img src={currentUser.avatar} alt="profile" className="avatar"/>
+              </div>
+            ) : (
+              
               <button className="navbutton">Sign in</button>
-            </Link>
-          </li>
+            )}
+          </Link>
+
+
           <li>
-            <Link to='/sign-up'>
+            <Link to="/sign-up">
               <button className="navbutton">Sign up</button>
             </Link>
           </li>
