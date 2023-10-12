@@ -200,7 +200,7 @@
 }
 
 .profile-unfold-button {
-  margin-right: 50px;
+  margin-right: 30px;
   display: flex;
   font-size: 24px;
   cursor: pointer;
@@ -208,10 +208,29 @@
   transition: color 0.3s ease;
 }
 
-.avatar {
+.sidebar_avatar {
   display: inline-block;
   vertical-align: middle;
-  height: 120px;
-  width: 120px;
+  height: 100px;
+  width: 100px;
   border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.sign-out{
+  border-radius: 10px;
+  width: 260px;
+  text-align: center;
+  height: 50px;
+  font-size: 20px;
+  margin-top: 20px;
+}
+.user_info_header{
+  margin-right: 120px;
+  padding: 0px;
+}
+
+.user_info_header_text{
+  margin-top: 0px;
+  margin-bottom: 0px;
 }

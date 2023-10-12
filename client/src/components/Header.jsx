@@ -99,10 +99,22 @@ export default function Header() {
         </ul>
       </div>
 
+
+
       {/* Unfold Button for Navigation Sidebar (Outside Sidebar) */}
       <div className="profile-unfold-button" onClick={toggleProfileSidebar}>
         {profileSidebarVisible ? <CloseOutlined /> : <UserOutlined />}
       </div>
+      {currentUser ? (
+          <div className="user_info_header">
+            <p className="user_info_header_text">{currentUser.username}</p>
+            <p className="user_info_header_text">KT Points: {currentUser.ktpoint}0</p>
+
+          </div>
+        ) : (
+          <>
+          </>
+        )}
 
       {/* Right Sidebar (Profile) */}
       <div
@@ -129,19 +141,24 @@ export default function Header() {
         )}
 
         <ul className="profile-sidenav">
-          <Link to="/profile">
+          
             {currentUser ? (
               <div className="profile-logo-container">
                 <img
                   src={currentUser.avatar}
                   alt="profile"
-                  className="avatar"
+                  className="sidebar_avatar"
                 />
+                <p>{currentUser.username}</p>
+                <Link to="/profile">
+                  <button className="sign-out">Profile</button>
+                </Link>
+                <button className="sign-out">Sign Out</button>
               </div>
             ) : (
               <button className="sign">Sign in</button>
             )}
-          </Link>
+          
 
           <Link to="/sign-up">
             {currentUser ? (
