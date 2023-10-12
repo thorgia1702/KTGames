@@ -9,9 +9,30 @@ import {
   UserOutlined,
   CloseOutlined,
 } from "@ant-design/icons";
-import { useSelector } from "react-redux";
+import {
+  signOutFailure,
+  signOutSuccess,
+  signOutStart,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch('/api/auth/signout');
+      const data = await res.json();
+      if (data.success === false){
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+    } catch (error) {
+      dispatch(signOutFailure(data.message));
+    }
+  }
   const { currentUser } = useSelector((state) => state.user);
   const [navSidebarVisible, setNavSidebarVisible] = useState(false);
   const [profileSidebarVisible, setProfileSidebarVisible] = useState(false);
@@ -153,10 +174,12 @@ export default function Header() {
                 <Link to="/profile">
                   <button className="sign-out">Profile</button>
                 </Link>
-                <button className="sign-out">Sign Out</button>
+                <button className="sign-out" onClick={handleSignOut}>Sign Out</button>
               </div>
             ) : (
-              <button className="sign">Sign in</button>
+              <Link to="/sign-in">
+                <button className="sign">Sign in</button>
+              </Link>
             )}
           
 
