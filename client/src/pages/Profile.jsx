@@ -78,8 +78,8 @@ export default function Profile() {
         <div className="profile-info">
           <p>Username: {currentUser.username}</p>
           <p>Email: {currentUser.email}</p>
-          <p>Phone: {currentUser.phone}000000000</p>
-          <p>Rank: {currentUser.rank}0</p>
+          <p>Phone: {currentUser.phone}</p>
+          <p>Rank: {currentUser.rank}</p>
           <p>KT points: {currentUser.ktpoint}0</p>
         </div>
       </div>

@@ -30,10 +30,8 @@
 }
 
 .logo-container {
-  flex-grow: 1;
-  /* Allow the logo container to take up available space */
-  text-align: center;
-  /* Center the logo horizontally */
+  margin-left: 580px;
+  margin-right: auto;
 }
 
 .logo {
@@ -50,7 +48,7 @@
   cursor: pointer;
   color: #fff;
   transition: color 0.3s ease;
-  margin-left: 50px;
+  margin-left: 80px;
 }
 
 .fold-button {
@@ -200,7 +198,7 @@
 }
 
 .profile-unfold-button {
-  margin-right: 30px;
+  margin-right: 80px;
   display: flex;
   font-size: 24px;
   cursor: pointer;
@@ -226,11 +224,18 @@
   margin-top: 20px;
 }
 .user_info_header{
-  margin-right: 120px;
+  margin-right: 40px;
   padding: 0px;
 }
 
 .user_info_header_text{
   margin-top: 0px;
   margin-bottom: 0px;
+}
+
+
+.search-bar-txt{
+  height: 25px;
+  font-size: 14px;
+  width: 390px;
 }

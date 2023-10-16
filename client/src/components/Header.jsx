@@ -8,6 +8,7 @@ import {
   MenuFoldOutlined,
   UserOutlined,
   CloseOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import {
   signOutFailure,
@@ -22,9 +23,9 @@ export default function Header() {
   const handleSignOut = async () => {
     try {
       dispatch(signOutStart());
-      const res = await fetch('/api/auth/signout');
+      const res = await fetch("/api/auth/signout");
       const data = await res.json();
-      if (data.success === false){
+      if (data.success === false) {
         dispatch(signOutFailure(data.message));
         return;
       }
@@ -32,7 +33,7 @@ export default function Header() {
     } catch (error) {
       dispatch(signOutFailure(data.message));
     }
-  }
+  };
   const { currentUser } = useSelector((state) => state.user);
   const [navSidebarVisible, setNavSidebarVisible] = useState(false);
   const [profileSidebarVisible, setProfileSidebarVisible] = useState(false);
@@ -64,11 +65,10 @@ export default function Header() {
             src={Logo}
             alt="Logo"
             height={120}
-            width={380}
+            width={320}
           />
         </Link>
-      </div>
-
+      </div> 
       {/* Left Sidebar (Navigation) */}
       <div className={`sidebar ${navSidebarVisible ? "visible" : ""}`}>
         {/* Fold Button for Navigation Sidebar (Inside Sidebar, Top Right) */}
@@ -93,23 +93,13 @@ export default function Header() {
             </a>
           </li>
           <li>
-            <a href="/dashboard">
-              <button className="navbutton">Dashboard</button>
+            <a href="/leaderboard">
+              <button className="navbutton">Leaderboard</button>
             </a>
           </li>
           <li>
-            <a href="/chess">
-              <button className="navbutton">Chess</button>
-            </a>
-          </li>
-          <li>
-            <a href="/tic_tac_toe">
+            <a href="/tic-tac-toe">
               <button className="navbutton">Tic tac toe</button>
-            </a>
-          </li>
-          <li>
-            <a href="/battleship">
-              <button className="navbutton">Battle ship</button>
             </a>
           </li>
           <li>
@@ -117,26 +107,29 @@ export default function Header() {
               <button className="navbutton">Bingo</button>
             </a>
           </li>
+          <li>
+            <a href="/ktshop">
+              <button className="navbutton">KT Shop</button>
+            </a>
+          </li>
         </ul>
       </div>
 
-
-
+      
+      {currentUser ? (
+        <div className="user_info_header">
+          <p className="user_info_header_text">{currentUser.username}</p>
+          <p className="user_info_header_text">
+            KT Points: {currentUser.ktpoint}
+          </p>
+        </div>
+      ) : (
+        <></>
+      )}
       {/* Unfold Button for Navigation Sidebar (Outside Sidebar) */}
       <div className="profile-unfold-button" onClick={toggleProfileSidebar}>
         {profileSidebarVisible ? <CloseOutlined /> : <UserOutlined />}
       </div>
-      {currentUser ? (
-          <div className="user_info_header">
-            <p className="user_info_header_text">{currentUser.username}</p>
-            <p className="user_info_header_text">KT Points: {currentUser.ktpoint}0</p>
-
-          </div>
-        ) : (
-          <>
-          </>
-        )}
-
       {/* Right Sidebar (Profile) */}
       <div
         className={`profile-sidebar ${profileSidebarVisible ? "visible" : ""}`}
@@ -162,26 +155,26 @@ export default function Header() {
         )}
 
         <ul className="profile-sidenav">
-          
-            {currentUser ? (
-              <div className="profile-logo-container">
-                <img
-                  src={currentUser.avatar}
-                  alt="profile"
-                  className="sidebar_avatar"
-                />
-                <p>{currentUser.username}</p>
-                <Link to="/profile">
-                  <button className="sign-out">Profile</button>
-                </Link>
-                <button className="sign-out" onClick={handleSignOut}>Sign Out</button>
-              </div>
-            ) : (
-              <Link to="/sign-in">
-                <button className="sign">Sign in</button>
+          {currentUser ? (
+            <div className="profile-logo-container">
+              <img
+                src={currentUser.avatar}
+                alt="profile"
+                className="sidebar_avatar"
+              />
+              <p>{currentUser.username}</p>
+              <Link to="/profile">
+                <button className="sign-out">Profile</button>
               </Link>
-            )}
-          
+              <button className="sign-out" onClick={handleSignOut}>
+                Sign Out
+              </button>
+            </div>
+          ) : (
+            <Link to="/sign-in">
+              <button className="sign">Sign in</button>
+            </Link>
+          )}
 
           <Link to="/sign-up">
             {currentUser ? (

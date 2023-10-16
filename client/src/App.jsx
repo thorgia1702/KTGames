@@ -9,6 +9,11 @@ import Footer from './components/Footer';
 import './App.css'
 import PrivateRoute from './components/PrivateRoute';
 
+import Tic_tac_toe from './pages/Tic_tac_toe';
+import Ktshop from './pages/Ktshop';
+import Bingo from './pages/Bingo';
+import Leaderboard from './pages/Leaderboard';
+
 export default function App() {
   return(
   <BrowserRouter>
@@ -19,6 +24,10 @@ export default function App() {
       <Route path='/sign-in' element={<SignIn/>}/>
       <Route path='/sign-up' element={<SignUp/>}/>
       <Route path='/about' element={<About/>}/>
+      <Route path='/leaderboard' element={<Leaderboard/>}/>
+      <Route path='/tic-tac-toe' element={<Tic_tac_toe/>}/>
+      <Route path='/ktshop' element={<Ktshop/>}/>
+      <Route path='/bingo' element={<Bingo/>}/>
       <Route element={<PrivateRoute/>}>
         <Route path='/profile' element={<Profile/>}/>
       </Route>
