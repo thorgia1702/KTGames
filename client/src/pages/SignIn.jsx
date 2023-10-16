@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./pages.css";
-import { notification, Alert, Space } from "antd";
+import { notification, Space } from "antd"; // Remove "Alert" from imports
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -38,30 +38,35 @@ export default function SignIn() {
       console.log(data);
       if (data.success === false) {
         dispatch(signInFailure(data.message));
+
+        // Display the error message as a popup
+        notification.error({
+          message: "Error",
+          description: data.message,
+        });
+
         return;
       }
       dispatch(signInSuccess(data));
       navigate("/");
     } catch (error) {
       dispatch(signInFailure(error.message));
+      // Display the error message as a popup
+      notification.error({
+        message: "Error",
+        description: error.message,
+      });
     }
   };
 
   return (
     <div>
       <h1>Sign In</h1>
-      {error && (
-        <Alert
-          className="alert_message"
-          message={error}
-          type="warning"
-          showIcon
-        />
-      )}
+
       <form onSubmit={handleSubmit} className="registerform">
         <div className="form-group">
           <label htmlFor="email">Email</label>
-          <input 
+          <input
             className="text_box"
             type="email"
             id="email"
@@ -88,7 +93,7 @@ export default function SignIn() {
           {loading ? "LOADING..." : "SIGN IN"}
         </button>
 
-        <Oauth/>
+        <Oauth />
 
         <p className="login-register-guide">
           Don't have an account? <a href="/sign-up">Register here!</a>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./pages.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button, Modal } from "antd";
+import { Button, Modal, notification } from "antd";
 import { useRef, useEffect } from "react";
 import {
   getDownloadURL,
@@ -23,17 +23,18 @@ export default function Profile() {
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
   const [fileUploadError, setFileUploadError] = useState(false);
-  const [updateSuccess, setUpdateSuccess] = useState(false);
   const [setLoading] = useState(false);
   const [open, setOpen] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [formData, setFormData] = useState({});
-
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // Added state for showing/hiding password input
   const dispatch = useDispatch();
 
   const showModal = () => {
     setOpen(true);
   };
+
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
@@ -81,8 +82,27 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
+  const handlePasswordCheckboxChange = () => {
+    setShowPassword(!showPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password && formData.password.length < 8) {
+      // Check if a password is provided and it's less than 8 characters
+      notification.error({
+        message: "Error",
+        description: "Password must be at least 8 characters long",
+      });
+      return;
+    }
+    if (!/^\d{10}$/.test(formData.phone)) {
+      notification.error({
+        message: "Error",
+        description: "Phone number must be a 10-digit number",
+      });
+      return;
+    }
     try {
       dispatch(updateUserStart());
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
@@ -93,12 +113,24 @@ export default function Profile() {
       const data = await res.json();
       if (data.success === false) {
         dispatch(updateUserFailure(data.message));
+        notification.error({
+          message: "Error",
+          description: data.message,
+        });
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+      notification.success({
+        message: "Success",
+        description: "User profile updated successfully",
+      });
     } catch (error) {
       dispatch(updateUserFailure(error.message));
+      notification.error({
+        message: "Error",
+        description: error.message,
+      });
     }
   };
   return (
@@ -113,7 +145,7 @@ export default function Profile() {
           <p>Email: {currentUser.email}</p>
           <p>Phone: {currentUser.phone}</p>
           <p>Rank: {currentUser.rank}</p>
-          <p>KT points: {currentUser.ktpoint}0</p>
+          <p>KT points: {currentUser.ktpoint}</p>
         </div>
       </div>
 
@@ -129,14 +161,8 @@ export default function Profile() {
           onOk={handleOk}
           onCancel={handleCancel}
           className="my-modal"
-          footer={[
-            <Button key="back" onClick={handleCancel}>
-              Cancel
-            </Button>,
-          ]}
-        > 
-        <p>{error ? error: ''}</p>
-        <p>{updateSuccess ? 'User profile updated successfully' : ''}</p>
+          footer={[]}
+        >
           <div className="profile-container">
             <div className="profile-header">
               <input
@@ -164,6 +190,7 @@ export default function Profile() {
               </p>
             </div>
             <form className="profile-info" onSubmit={handleSubmit}>
+              <p>Username:</p>
               <input
                 type="text"
                 placeholder="Username"
@@ -172,6 +199,8 @@ export default function Profile() {
                 id="username"
                 onChange={handleChange}
               ></input>
+
+              <p>Email:</p>
               <input
                 type="text"
                 placeholder="Email"
@@ -180,6 +209,8 @@ export default function Profile() {
                 id="email"
                 onChange={handleChange}
               ></input>
+
+              <p>Phone number:</p>
               <input
                 type="text"
                 placeholder="Phone"
@@ -188,6 +219,29 @@ export default function Profile() {
                 id="phone"
                 onChange={handleChange}
               ></input>
+
+              <p>Password:</p>
+              <input
+                type="password"
+                className="edit-text"
+                id="password"
+                placeholder="Enter New Password"
+                onChange={handleChange}
+                disabled={!showPassword} // Disable the password input based on showPassword state
+              ></input>
+
+              <div className="checkbox-container">
+                <label htmlFor="password-checkbox" className="password-label">
+                  Change password?
+                </label>
+                <input
+                  type="checkbox"
+                  checked={showPassword}
+                  onChange={handlePasswordCheckboxChange}
+                  className="password-checkbox"
+                />
+              </div>
+
               <br></br>
               <button disabled={loading} className="updatebtn">
                 {loading ? "LOADING..." : "UPDATE"}

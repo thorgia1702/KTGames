@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./pages.css";
-import { notification, Alert, Space } from "antd";
+import { notification, Space } from "antd"; // Remove "Alert" from imports
 import { Link, useNavigate } from "react-router-dom";
 import Oauth from "../components/Oauth";
 
@@ -19,6 +19,14 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long.");
+      notification.error({
+        message: "Error",
+        description: "Password must be at least 8 characters long",
+      });
+      return;
+    }
     try {
       setLoading(true);
       const res = await fetch("/api/auth/signup", {
@@ -33,6 +41,13 @@ export default function SignUp() {
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
+
+        // Display the error message as a popup
+        notification.error({
+          message: "Error",
+          description: "User already exists!, please choose another email",
+        });
+
         return;
       }
       setLoading(false);
@@ -41,20 +56,19 @@ export default function SignUp() {
     } catch (error) {
       setLoading(false);
       setError(error.message);
+
+      // Display the error message as a popup
+      notification.error({
+        message: "Error",
+        description: error.message,
+      });
     }
   };
 
   return (
     <div>
       <h1>Sign Up</h1>
-      {error && (
-        <Alert
-          className="alert_message"
-          message={error}
-          type="warning"
-          showIcon
-        />
-      )}
+
       <form onSubmit={handleSubmit} className="registerform">
         <div className="form-group">
           <label htmlFor="name">Name</label>
