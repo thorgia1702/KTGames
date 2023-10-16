@@ -12,16 +12,24 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
   const [fileUploadError, setFileUploadError] = useState(false);
-
-  const [loading, setLoading] = useState(false);
+  const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [setLoading] = useState(false);
   const [open, setOpen] = useState(undefined);
   const [filePerc, setFilePerc] = useState(0);
   const [formData, setFormData] = useState({});
+
+  const dispatch = useDispatch();
 
   const showModal = () => {
     setOpen(true);
@@ -36,7 +44,8 @@ export default function Profile() {
   const handleCancel = () => {
     setOpen(false);
   };
-  const { currentUser } = useSelector((state) => state.user);
+  const { currentUser, loading, error } = useSelector((state) => state.user);
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -68,6 +77,30 @@ export default function Profile() {
     );
   };
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
   return (
     <div className="profile-page">
       <h1>Profile</h1>
@@ -100,16 +133,10 @@ export default function Profile() {
             <Button key="back" onClick={handleCancel}>
               Cancel
             </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              loading={loading}
-              onClick={handleOk}
-            >
-              Submit
-            </Button>,
           ]}
-        >
+        > 
+        <p>{error ? error: ''}</p>
+        <p>{updateSuccess ? 'User profile updated successfully' : ''}</p>
           <div className="profile-container">
             <div className="profile-header">
               <input
@@ -121,7 +148,7 @@ export default function Profile() {
               />
               <img
                 onClick={() => fileRef.current.click()}
-                src={formData.avatar ||currentUser.avatar}
+                src={formData.avatar || currentUser.avatar}
                 className="avatar"
               />
               <p>
@@ -132,30 +159,40 @@ export default function Profile() {
                 ) : filePerc === 100 ? (
                   <span>Image upload successfully!</span>
                 ) : (
-                  ''
+                  ""
                 )}
               </p>
             </div>
-            <div className="profile-info">
+            <form className="profile-info" onSubmit={handleSubmit}>
               <input
                 type="text"
                 placeholder="Username"
+                defaultValue={currentUser.username}
                 className="edit-text"
                 id="username"
+                onChange={handleChange}
               ></input>
               <input
                 type="text"
                 placeholder="Email"
                 className="edit-text"
+                defaultValue={currentUser.email}
                 id="email"
+                onChange={handleChange}
               ></input>
               <input
                 type="text"
                 placeholder="Phone"
+                defaultValue={currentUser.phone}
                 className="edit-text"
                 id="phone"
+                onChange={handleChange}
               ></input>
-            </div>
+              <br></br>
+              <button disabled={loading} className="updatebtn">
+                {loading ? "LOADING..." : "UPDATE"}
+              </button>
+            </form>
           </div>
         </Modal>
       </div>

@@ -259,3 +259,10 @@ hr {
   color: #1a1a1a;
   font-size: 20px;
 }
+
+.updatebtn{
+  width: 612px;
+  background-color: rgb(32, 29, 57);
+  color: #ffffff;
+  height: 45px;
+}
