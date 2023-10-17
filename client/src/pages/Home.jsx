@@ -61,7 +61,7 @@ export default function Home() {
 
       <div className="grid-container">
         <div>
-          <a href="/tic_tac_toe">
+          <a href="/tic-tac-toe">
             <img
               className="game"
               src={Tictactoe}

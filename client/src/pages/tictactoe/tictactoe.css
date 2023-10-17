@@ -3,10 +3,11 @@
     margin-bottom: 30px;
     width: 500px;
     height: 500px;
-    grid-gap: 25px;
+    
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-gap: 10px;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
 }
 
 .game-cell{
@@ -15,14 +16,36 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    font-size: 80px;
-    box-shadow: rgba(125, 131, 131, 0.2) 0px 8px 24px;
+    font-size: 22px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #0e1e1e;
+}
+
+.game-cell:hover{
+    border-radius: 8px;
+    border-color: #cbc210;
 }
 
 .game-cell.is-x{
-    color: blue;
+    color: #4cbe84;
 }
 
 .game-cell.is-o{
-    color: red;
+    color: rgba(229,69,60,255);
+}
+
+.game-cell.is-x:hover{
+    border-radius: 5px;
+    border-color: rgb(212, 214, 216);
+}
+
+.game-cell.is-o:hover{
+    border-radius: 5px;
+    border-color: rgb(212, 214, 216);
+}
+
+.reset-button{
+    margin-left: 380px;
+    background-color: black;
 }
