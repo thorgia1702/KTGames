@@ -8,11 +8,11 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import './App.css'
 import PrivateRoute from './components/PrivateRoute';
-
-import Tic_tac_toe from './pages/Tic_tac_toe';
 import Ktshop from './pages/Ktshop';
-import Bingo from './pages/Bingo';
 import Leaderboard from './pages/Leaderboard';
+import Tic_tac_toe from './pages/tictactoe/Tic_tac_toe';
+import Bingo from './pages/bingo/Bingo';
+
 
 export default function App() {
   return(

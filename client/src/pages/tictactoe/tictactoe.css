@@ -1,0 +1,28 @@
+.game-board{
+    margin-left: 200px;
+    margin-bottom: 30px;
+    width: 500px;
+    height: 500px;
+    grid-gap: 25px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.game-cell{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 80px;
+    box-shadow: rgba(125, 131, 131, 0.2) 0px 8px 24px;
+}
+
+.game-cell.is-x{
+    color: blue;
+}
+
+.game-cell.is-o{
+    color: red;
+}
