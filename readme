@@ -1,0 +1,6 @@
+in root:
+npm install
+npm run dev
+
+in client
+npm run dev
