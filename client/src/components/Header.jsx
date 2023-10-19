@@ -58,64 +58,112 @@ export default function Header() {
       </div>
 
       {/* Logo */}
-      <div className="logo-container">
-        <Link to="/">
-          <img
-            className="logo"
-            src={Logo}
-            alt="Logo"
-            height={120}
-            width={320}
-          />
-        </Link>
-      </div> 
+      {currentUser && currentUser.role === "admin" ? (
+        <div className="logo-container">
+          <Link to="/admin">
+            <img
+              className="logo"
+              src={Logo}
+              alt="Logo"
+              height={120}
+              width={320}
+            />
+          </Link>
+        </div>
+      ) : (
+        <div className="logo-container">
+          <Link to="/">
+            <img
+              className="logo"
+              src={Logo}
+              alt="Logo"
+              height={120}
+              width={320}
+            />
+          </Link>
+        </div>
+      )}
+
       {/* Left Sidebar (Navigation) */}
       <div className={`sidebar ${navSidebarVisible ? "visible" : ""}`}>
         {/* Fold Button for Navigation Sidebar (Inside Sidebar, Top Right) */}
         <div className="fold-button" onClick={toggleNavSidebar}>
           {navSidebarVisible ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
         </div>
-        <div className="mini-logo-container">
-          <a href="/">
-            <img
-              className="logo"
-              src={Logo}
-              alt="Logo"
-              height={90}
-              width={230}
-            />
-          </a>
-        </div>
-        <ul className="sidenav">
-          <li>
+        {currentUser && currentUser.role === "admin" ? (
+          <div className="mini-logo-container">
+            <a href="/admin">
+              <img
+                className="logo"
+                src={Logo}
+                alt="Logo"
+                height={90}
+                width={230}
+              />
+            </a>
+          </div>
+        ) : (
+          <div className="mini-logo-container">
             <a href="/">
-              <button className="navbutton">Home</button>
+              <img
+                className="logo"
+                src={Logo}
+                alt="Logo"
+                height={90}
+                width={230}
+              />
             </a>
-          </li>
-          <li>
-            <a href="/leaderboard">
-              <button className="navbutton">Leaderboard</button>
-            </a>
-          </li>
-          <li>
-            <a href="/tic-tac-toe">
-              <button className="navbutton">Tic tac toe</button>
-            </a>
-          </li>
-          <li>
-            <a href="/bingo">
-              <button className="navbutton">Bingo</button>
-            </a>
-          </li>
-          <li>
-            <a href="/ktshop">
-              <button className="navbutton">KT Shop</button>
-            </a>
-          </li>
-        </ul>
+          </div>
+        )}
+        {currentUser && currentUser.role === "admin" ? (
+          <ul className="sidenav">
+            <li>
+              <a href="/admin">
+                <button className="navbutton">Home</button>
+              </a>
+            </li>
+            <li>
+              <a href="/uses">
+                <button className="navbutton">Manage accounts</button>
+              </a>
+            </li>
+            <li>
+              <a href="/items">
+                <button className="navbutton">Manage shop</button>
+              </a>
+            </li>
+          </ul>
+        ) : (
+          <ul className="sidenav">
+            <li>
+              <a href="/">
+                <button className="navbutton">Home</button>
+              </a>
+            </li>
+            <li>
+              <a href="/leaderboard">
+                <button className="navbutton">Leaderboard</button>
+              </a>
+            </li>
+            <li>
+              <a href="/tic-tac-toe">
+                <button className="navbutton">Tic tac toe</button>
+              </a>
+            </li>
+            <li>
+              <a href="/bingo">
+                <button className="navbutton">Bingo</button>
+              </a>
+            </li>
+            <li>
+              <a href="/ktshop">
+                <button className="navbutton">KT Shop</button>
+              </a>
+            </li>
+          </ul>
+        )}
       </div>
 
-      
       {currentUser ? (
         <div className="user_info_header">
           <p className="user_info_header_text">{currentUser.username}</p>

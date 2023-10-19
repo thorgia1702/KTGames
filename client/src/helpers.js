@@ -21,7 +21,7 @@
 //     return null;
 // }
 
-export function calculateWinner(cells) {
+export function calculateWinnerOffline(cells) {
     const lines = [];
 
     // Check rows (horizontal)

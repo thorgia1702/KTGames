@@ -9,8 +9,11 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id)
-    return next(errorHandler(401, "You can only update your account!"));
+  
+  if (req.user.id !== req.params.id & req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
+  {
+    return next(errorHandler(401, "You do not have permission to update this user!"));
+  }
   try {
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
@@ -34,6 +37,17 @@ export const updateUser = async (req, res, next) => {
     const { password, ...rest } = updateUser._doc;
 
     res.status(200).json(rest);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (req, res, next) => {
+  if(req.user.id !== "652dfb3ed4d4a5853e8f8dd0") 
+    return next(errorHandler(401, 'You do not have permission do delete user!'))
+  try {
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json('User has been deleted!');
   } catch (error) {
     next(error);
   }
