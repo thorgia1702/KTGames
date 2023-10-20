@@ -1,6 +1,7 @@
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
+import { io } from "../utils/initSocketIo.js";
 
 export const test = (req, res) => {
   res.json({
@@ -9,15 +10,23 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  
-  if (req.user.id !== req.params.id & req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
-  {
-    return next(errorHandler(401, "You do not have permission to update this user!"));
+  if (
+    (req.user.id !== req.params.id) &
+    (req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
+  ) {
+    return next(
+      errorHandler(401, "You do not have permission to update this user!")
+    );
   }
   try {
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
+
+    const roomId = 123;
+
+    io.emit(`roomid:${roomId}`, { message: "message" });
+    console.log(123423452345234524);
 
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -28,7 +37,6 @@ export const updateUser = async (req, res, next) => {
           password: req.body.password,
           avatar: req.body.avatar,
           phone: req.body.phone,
-          
         },
       },
       { new: true }
@@ -43,11 +51,13 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if(req.user.id !== "652dfb3ed4d4a5853e8f8dd0") 
-    return next(errorHandler(401, 'You do not have permission do delete user!'))
+  if (req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
+    return next(
+      errorHandler(401, "You do not have permission do delete user!")
+    );
   try {
     await User.findByIdAndDelete(req.params.id);
-    res.status(200).json('User has been deleted!');
+    res.status(200).json("User has been deleted!");
   } catch (error) {
     next(error);
   }
