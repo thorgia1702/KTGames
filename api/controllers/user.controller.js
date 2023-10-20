@@ -23,10 +23,8 @@ export const updateUser = async (req, res, next) => {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
 
-    const roomId = 123;
-
-    io.emit(`roomid:${roomId}`, { message: "message" });
-    console.log(123423452345234524);
+    // const roomId = 123;
+    // io.emit(`roomid:${roomId}`, { message: "message" });
 
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,

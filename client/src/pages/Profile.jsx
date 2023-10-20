@@ -141,10 +141,10 @@ export default function Profile() {
   const logging = (data) => {
     setNewData(data.message);
   };
-  useEffect(() => {
-    appSocket.on(`roomid:${roomId}`, logging);
-    return () => appSocket.off(`roomid:${roomId}`);
-  }, [logging]);
+  // useEffect(() => {
+  //   appSocket.on(`roomid:${roomId}`, logging);
+  //   return () => appSocket.off(`roomid:${roomId}`);
+  // }, [logging]);
 
   return (
     <div className="profile-page">

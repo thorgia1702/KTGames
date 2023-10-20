@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../pages.css";
 import Board from "./Board";
 import "./tictactoe.css";
-import { calculateWinnerOffline } from "../../helpers";
+import { calculateWinnerOffline } from "../../game_logics";
 import { Button, Modal, message } from "antd";
 
 export default function Tic_tac_toe_offline() {
