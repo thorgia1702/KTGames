@@ -29,7 +29,7 @@ export default function Profile() {
   const [filePerc, setFilePerc] = useState(0);
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
-  const [showPassword, setShowPassword] = useState(false); // Added state for showing/hiding password input
+  const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
 
   const showModal = () => {
@@ -46,6 +46,7 @@ export default function Profile() {
   const handleCancel = () => {
     setOpen(false);
   };
+  
   const { currentUser, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
