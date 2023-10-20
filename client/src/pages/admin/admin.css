@@ -1,0 +1,30 @@
+.item-information {
+    background-color: white;
+    height: 30px;
+    width: 930px;
+    color: #1a1a1a;
+    font-size: 20px;
+}
+
+.item_description {
+    background-color: white;
+    height: 100px;
+    width: 930px;
+    color: #1a1a1a;
+    font-size: 20px;
+    text-align: top;
+}
+
+textarea {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-seriFf;
+}
+
+.add-btn {
+    margin-top: 30px;
+    width: 300px;
+    height: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: black 1px solid;
+}

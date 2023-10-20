@@ -135,12 +135,12 @@ export default function Profile() {
     }
   };
 
-  const roomId = 123;
-  const { appSocket } = useSocket();
-  const [newData, setNewData] = useState("");
-  const logging = (data) => {
-    setNewData(data.message);
-  };
+  // const roomId = 123;
+  // const { appSocket } = useSocket();
+  // const [newData, setNewData] = useState("");
+  // const logging = (data) => {
+  //   setNewData(data.message);
+  // };
   // useEffect(() => {
   //   appSocket.on(`roomid:${roomId}`, logging);
   //   return () => appSocket.off(`roomid:${roomId}`);
@@ -149,7 +149,7 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <h1>Profile</h1>
-      <h3>{newData}</h3>
+      {/* <h3>{newData}</h3> */}
       <div className="profile-container">
         <div className="profile-header">
           <img src={currentUser.avatar} className="avatar" />
