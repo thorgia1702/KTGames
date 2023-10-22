@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../pages.css";
 import "./admin.css";
 import { Button, Modal, notification } from "antd";
+import { useNavigate } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -11,15 +12,21 @@ import {
 import { app } from "../../firebase";
 
 export default function Profile() {
-  const [setLoading] = useState(false);
   const [open, setOpen] = useState(undefined);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     imageUrls: [],
+    name: "",
+    description: "",
+    point: 100,
   });
-  console.log(formData);
+
   const [files, setFiles] = useState([]);
   const [imageUploadError, setImageUploadError] = useState(false);
-  const [uploading, setUploading] = useState(false);  
+  const [uploading, setUploading] = useState(false);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const showErrorModal = (errorMessage) => {
     Modal.error({
       title: "Error",
@@ -116,6 +123,48 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.name || !formData.description || !formData.point) {
+      notification.error({
+        message: "Incomplete Information",
+        description: "Please fill in all required fields.",
+      });
+      return;
+    }
+    if (formData.imageUrls.length === 0) {
+      notification.error({
+        message: "Incomplete Information",
+        description: "Please upload at least one image for the item.",
+      });
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(false);
+      const res = await fetch("api/item/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      setLoading(false);
+      if (data.success === false) {
+        const errorMessage = data.message;
+        setError(errorMessage);
+        showErrorModal("Item have already existed");
+      } else {
+        notification.success({
+          message: "Success",
+          description: "Item added successfully",
+        });
+      }
+    } catch (error) {
+      const errorMessage = error.message;
+      setError(errorMessage);
+      setLoading(false);
+      showErrorModal(errorMessage);
+    }
   };
 
   return (
@@ -151,6 +200,8 @@ export default function Profile() {
                 className="item-information"
                 id="name"
                 onChange={handleChange}
+                value={formData.name}
+                required
               ></input>
 
               <p>Item description:</p>
@@ -160,15 +211,18 @@ export default function Profile() {
                 className="item_description"
                 id="description"
                 onChange={handleChange}
+                value={formData.description}
               ></textarea>
 
               <p>Point:</p>
               <input
                 type="number"
-                placeholder="Require point"
                 className="item-information"
+                min="100"
+                max="10000"
                 id="point"
                 onChange={handleChange}
+                value={formData.point}
               ></input>
 
               <div>
@@ -187,7 +241,7 @@ export default function Profile() {
                   type="button"
                   disabled={uploading}
                 >
-                  {uploading ? 'UPLOADING...' : 'UPLOAD'}
+                  {uploading ? "UPLOADING..." : "UPLOAD"}
                 </Button>
               </div>
               {formData.imageUrls.length > 0 &&
@@ -197,15 +251,16 @@ export default function Profile() {
                     <Button
                       className="delete-uploaded"
                       type="button"
-                      onClick={()=>handleRemoveImage(index)}
+                      onClick={() => handleRemoveImage(index)}
                     >
                       DELETE
                     </Button>
                   </div>
                 ))}
               <br></br>
-
-              <Button className="add-btn">ADD ITEM</Button>
+              <Button className="add-btn" type="button" onClick={handleSubmit} disabled={loading || uploading}>
+                {loading ? "ADDING..." : "ADD ITEM"}
+              </Button>
             </form>
           </div>
         </Modal>

@@ -117,7 +117,7 @@ export default function Profile() {
         dispatch(updateUserFailure(data.message));
         notification.error({
           message: "Error",
-          description: data.message,
+          description: "Username or email address is already in use",
         });
         return;
       }

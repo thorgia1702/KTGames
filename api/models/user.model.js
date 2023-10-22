@@ -5,6 +5,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
+      unique: true,
     },
     email: {
       type: String,
@@ -41,30 +42,29 @@ const userSchema = new mongoose.Schema(
     ktpoint: {
       type: Number,
       required: false,
-      default: 0
+      default: 0,
     },
     phone: {
       type: String,
       required: false,
-      default: '0000000000',
+      default: "0000000000",
       validate: {
         validator: function (value) {
           // Use a regular expression to validate the phone number format
           const phoneRegex = /^\d{10}$/; // 10-digit phone number
           return phoneRegex.test(value);
         },
-        message: 'Invalid phone number format. Please enter a 10-digit number.',
+        message: "Invalid phone number format. Please enter a 10-digit number.",
       },
     },
     role: {
       type: String,
       default: "user",
-    }
+    },
   },
   { timestamps: true }
 );
 
 const User = mongoose.model("User", userSchema);
-
 
 export default User;
