@@ -49,10 +49,15 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
+  if (req.user.id !== "653537ec22edc6eba8d88aa7")
     return next(
-      errorHandler(401, "You do not have permission do delete user!")
+      errorHandler(401, "You do not have permission to delete user!")
     );
+  if (req.params.id ==="653537ec22edc6eba8d88aa7"){
+    return next(
+      errorHandler(401, "You do not have permission to delete admin!")
+    );
+  }
   try {
     await User.findByIdAndDelete(req.params.id);
     res.status(200).json("User has been deleted!");
@@ -60,3 +65,12 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.status(200).json(users);
+  } catch (error) {
+    next(error);
+  }
+}

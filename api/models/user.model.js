@@ -17,14 +17,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
-    birthday: {
-      type: Date,
-      required: false,
-    },
-    isActivate: {
-      type: Boolean,
-      default: false,
-    },
     isBanned: {
       type: Boolean,
       default: false,
@@ -34,7 +26,7 @@ const userSchema = new mongoose.Schema(
       default:
         "https://scontent.fhan20-1.fna.fbcdn.net/v/t1.15752-9/250510336_616776576166119_4735492534877987506_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=MbVR_IVKxXEAX8Smse2&_nc_ht=scontent.fhan20-1.fna&oh=03_AdQl9RSdg4IFbBMpGt5IQxQbdcfDrmqYj8Ao86O9oSYy6w&oe=654E3679",
     },
-    rank: {
+    trophy: {
       type: Number,
       required: false,
       default: 0,
@@ -47,7 +39,7 @@ const userSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: false,
-      default: "0000000000",
+      default: "1234567890",
       validate: {
         validator: function (value) {
           // Use a regular expression to validate the phone number format

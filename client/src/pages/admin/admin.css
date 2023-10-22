@@ -102,10 +102,19 @@ textarea {
 .edit-btn{
     background-color: rgb(20, 152, 20);
     width: 100px;
-    
+    margin-bottom: 15px;
 }
 
 .btn{
     display: flex;
     flex-direction: column;
 }
+ .list-of-users{
+    width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
+ }
+
+ .ban-btn{
+    background-color: rgb(160, 0, 253);
+ }
