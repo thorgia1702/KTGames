@@ -358,6 +358,7 @@ export default function Profile() {
         open={deleteConfirmation}
         onOk={confirmDelete}
         onCancel={cancelDelete}
+        centered
       >
         <p>Are you sure you want to delete this item?</p>
       </Modal>
