@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../pages.css";
 import "./admin.css";
 import { Button, Modal, notification } from "antd";
@@ -26,6 +26,10 @@ export default function Profile() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showItemsError, setShowItemsError] = useState(false);
+  const [items, setItems] = useState([]);
+
+  console.log(formData);
 
   const showErrorModal = (errorMessage) => {
     Modal.error({
@@ -113,6 +117,7 @@ export default function Profile() {
       setOpen(false);
     }, 3000);
   };
+
   const handleCancel = () => {
     setOpen(false);
   };
@@ -157,8 +162,10 @@ export default function Profile() {
         notification.success({
           message: "Success",
           description: "Item added successfully",
+          
         });
       }
+      showItems();
     } catch (error) {
       const errorMessage = error.message;
       setError(errorMessage);
@@ -167,15 +174,26 @@ export default function Profile() {
     }
   };
 
+  const showItems = async () => {
+    try {
+      setShowItemsError(false);
+      const res = await fetch("api/item/items");
+      const data = await res.json();
+      if (data.success === false) {
+        setShowItemsError(true);
+        return;
+      }
+      setItems(data);
+    } catch (error) {
+      setShowItemsError(true);
+    }
+  };
+  useEffect(() => {
+    showItems();
+  }, []);
   return (
     <div className="profile-page">
       <h1>Manage item</h1>
-      <div className="item-list">
-        <h2>Items</h2>
-        <h2>Items</h2>
-        <h2>Items</h2>
-        <h2>Items</h2>
-      </div>
 
       <div className="add-item">
         <button className="showModal-btn" onClick={showModal}>
@@ -258,12 +276,29 @@ export default function Profile() {
                   </div>
                 ))}
               <br></br>
-              <Button className="add-btn" type="button" onClick={handleSubmit} disabled={loading || uploading}>
+              <Button
+                className="add-btn"
+                type="button"
+                onClick={handleSubmit}
+                disabled={loading || uploading}
+              >
                 {loading ? "ADDING..." : "ADD ITEM"}
               </Button>
             </form>
           </div>
         </Modal>
+      </div>
+      <div className="list-of-item">
+        {items.map((item) => (
+          <div key={item._id} className="item-card">
+            <img src={item.imageUrls[0]} alt="item image" className="item-image"/>
+            <p className="item-name">{item.name}</p>
+            <div className="btn">
+              <button className="delete-btn">DELETE</button>
+              <button className="edit-btn">EDIT</button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
