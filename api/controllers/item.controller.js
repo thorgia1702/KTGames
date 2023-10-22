@@ -8,3 +8,12 @@ export const createItem = async (req, res, next) => {
         next(error);
     }
 }
+
+export const getItems = async (req, res, next) => {
+    try {
+        const items = await Item.find({});
+        res.status(200).json(items);
+    } catch (error) {
+        next(error);
+    }
+}
