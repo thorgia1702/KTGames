@@ -27,4 +27,44 @@ textarea {
     margin-left: auto;
     margin-right: auto;
     border: black 1px solid;
+    background-color: rgb(107, 107, 241);
+    color: white;
+}
+
+#image{
+    width: 730px;
+    margin-right: 30px;
+}
+
+.upload-btn {
+    width: 150px;
+    height: 43px;
+    color: #ffffff;
+    background-color: rgb(45, 195, 11);
+}
+
+.uploaded-img{
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    object-fit: contain
+}
+
+.uploaded-container{
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border: #e0dbdb 1px solid;
+    border-radius: 8px;
+    align-items: center;
+    margin-top: 20px;
+    width: 920px;
+}
+
+.delete-uploaded{
+    background-color: rgb(217, 58, 58);
+    width: 100px;
+    height: 45px;
+    color: #fffefe;
+    margin-right: 35px;
 }
