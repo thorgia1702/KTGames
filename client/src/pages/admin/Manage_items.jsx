@@ -13,6 +13,8 @@ import { app } from "../../firebase";
 
 export default function Profile() {
   const [open, setOpen] = useState(undefined);
+  const [deleteConfirmation, setDeleteConfirmation] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null); 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -162,7 +164,6 @@ export default function Profile() {
         notification.success({
           message: "Success",
           description: "Item added successfully",
-          
         });
       }
       showItems();
@@ -191,6 +192,47 @@ export default function Profile() {
   useEffect(() => {
     showItems();
   }, []);
+
+  const handleDeleteItem = (itemId) => {
+    setDeleteConfirmation(true);
+    setDeleteItemId(itemId);
+  };
+
+  const confirmDelete = async() => {
+    if (deleteItemId) {
+      try {
+        const res = await fetch(`/api/item/delete/${deleteItemId}`, {
+          method: 'DELETE',
+        });
+        const data = await res.json();
+        
+        if (data.success === false){
+          const errorMessage = data.message;
+          setError(errorMessage);
+          showErrorModal("Item deletion failed");
+        } else {
+          notification.success({
+            message: "Success",
+            description: "Item deleted successfully",
+          });
+          setDeleteConfirmation(false);
+          setDeleteItemId(null);
+          showItems();
+        }
+      } catch (error) {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        setLoading(false);
+        showErrorModal(errorMessage);
+      }
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteConfirmation(false);
+    setDeleteItemId(null);
+  };
+
   return (
     <div className="profile-page">
       <h1>Manage item</h1>
@@ -288,18 +330,37 @@ export default function Profile() {
           </div>
         </Modal>
       </div>
+
       <div className="list-of-item">
         {items.map((item) => (
           <div key={item._id} className="item-card">
-            <img src={item.imageUrls[0]} alt="item image" className="item-image"/>
+            <img
+              src={item.imageUrls[0]}
+              alt="item image"
+              className="item-image"
+            />
             <p className="item-name">{item.name}</p>
             <div className="btn">
-              <button className="delete-btn">DELETE</button>
+              <button
+                onClick={() => handleDeleteItem(item._id)}
+                className="delete-btn"
+              >
+                DELETE
+              </button>
               <button className="edit-btn">EDIT</button>
             </div>
           </div>
         ))}
       </div>
+      {/* Delete Confirmation Modal */}
+      <Modal
+        title="Confirm Deletion"
+        open={deleteConfirmation}
+        onOk={confirmDelete}
+        onCancel={cancelDelete}
+      >
+        <p>Are you sure you want to delete this item?</p>
+      </Modal>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import Item from "../models/item.model.js";
+import { errorHandler } from "../utils/error.js";
 
 export const createItem = async (req, res, next) => {
   try {
@@ -13,6 +14,19 @@ export const getItems = async (req, res, next) => {
   try {
     const items = await Item.find({});
     res.status(200).json(items);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteItem = async (req, res, next) => {
+  const item = await Item.findById(req.params.id);
+  if (!item) {
+    return next(errorHandler(404,'Item not found!'));
+  }
+  try {
+    await Item.findByIdAndDelete((req.params.id))
+    res.status(200).json('Item deleted successfully');
   } catch (error) {
     next(error);
   }
