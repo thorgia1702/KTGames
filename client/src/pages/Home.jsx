@@ -10,9 +10,13 @@ import Gow from "../images/gow.png";
 import Farcry5 from "../images/farcry5.png";
 import Dmc5 from "../images/dmc5.png";
 import Cs2 from "../images/cs2.png";
+import { useDispatch, useSelector } from "react-redux";
+import Usermanage from "../images/user-manage.png";
+import Itemmanage from "../images/item-manage.png";
 
 export default function Home() {
   const [slideIndex, setSlideIndex] = useState(1);
+  const { currentUser } = useSelector((state) => state.user);
 
   const plusSlides = (n) => {
     showSlides(slideIndex + n);
@@ -53,38 +57,76 @@ export default function Home() {
 
   return (
     <div>
-      <h1>Welcome to KTGames!</h1>
+      {currentUser && currentUser.role === "admin" ? (
+        <h1>Welcome to KTGames Management site</h1>
+      ) : (
+        <h1>Welcome to KTGames!</h1>
+      )}
+
       <hr></hr>
 
       {/* GAMES! */}
-      <h2>All games</h2>
+      {currentUser && currentUser.role === "admin" ? (
+        <h2>Management pages</h2>
+      ) : (
+        <h2>All games</h2>
+      )}
 
-      <div className="grid-container">
-        <div>
-          <a href="/tic-tac-toe">
-            <img
-              className="game"
-              src={Tictactoe}
-              alt="tictactoe"
-              height={300}
-              width={300}
-            />
-            <p>Tic tac toe</p>
-          </a>
+      {currentUser && currentUser.role === "admin" ? (
+        <div className="grid-container">
+          <div>
+            <a href="/user">
+              <img
+                className="game"
+                src={Usermanage}
+                alt="user-manage"
+                height={300}
+                width={300}
+              />
+              <p>Manage user</p>
+            </a>
+          </div>
+          <div>
+            <a href="/items">
+              <img
+                className="game"
+                src={Itemmanage}
+                alt="item-manage"
+                height={300}
+                width={300}
+              />
+              <p>Manage item</p>
+            </a>
+          </div>
         </div>
-        <div>
-          <a href="/bingo">
-            <img
-              className="game"
-              src={Bingo}
-              alt="bingo"
-              height={300}
-              width={300}
-            />
-            <p>Bingo</p>
-          </a>
+      ) : (
+        <div className="grid-container">
+          <div>
+            <a href="/tic-tac-toe">
+              <img
+                className="game"
+                src={Tictactoe}
+                alt="tictactoe"
+                height={300}
+                width={300}
+              />
+              <p>Tic tac toe</p>
+            </a>
+          </div>
+          <div>
+            <a href="/bingo">
+              <img
+                className="game"
+                src={Bingo}
+                alt="bingo"
+                height={300}
+                width={300}
+              />
+              <p>Bingo</p>
+            </a>
+          </div>
         </div>
-      </div>
+      )}
 
       <hr></hr>
 
