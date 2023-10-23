@@ -50,10 +50,10 @@ export default function App() {
 
           <Route element={<AdminRoute />}>
             <Route path="/admin" element={<Admin />} />
-            <Route path="/user" element={<Manage_users />} />
+            <Route path="/users" element={<Manage_users />} />
             <Route path="/items" element={<Manage_items />} />
             <Route path="/update-item/:itemId" element={<Update_item />} />
-            <Route path="/update-user" element={<Update_user />} />
+            <Route path="/update-user/:userId" element={<Update_user />} />
           </Route>
         </Routes>
       </div>

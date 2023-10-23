@@ -75,7 +75,7 @@ export default function Home() {
       {currentUser && currentUser.role === "admin" ? (
         <div className="grid-container">
           <div>
-            <a href="/user">
+            <a href="/users">
               <img
                 className="game"
                 src={Usermanage}

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../pages.css";
 import "./admin.css";
 import { Button, Modal, notification } from "antd";
+import { Link } from "react-router-dom";
 
 export default function Manage_users() {
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
@@ -91,7 +92,9 @@ export default function Manage_users() {
             <p className="item-name">{user.phone}</p>
             <p className="item-name">{user.trophy}</p>
             <p className="item-name">{user.ktpoint}</p>
-            <p className="item-name">{user.isBanned === false ? 'Un-ban' : 'Banned'}</p>
+            <p className="item-name">
+              {user.isBanned === false ? "Un-ban" : "Banned"}
+            </p>
             <div className="btn">
               <button
                 onClick={() => handleDeleteUser(user._id)}
@@ -99,8 +102,14 @@ export default function Manage_users() {
               >
                 DELETE
               </button>
-              <button className="edit-btn">EDIT</button>
-              <button className="ban-btn">{user.isBanned === false ? 'BAN' : 'UN-BAN'}</button>
+
+              <Link to={`/update-user/${user._id}`}>
+                <button className="edit-btn">EDIT</button>
+              </Link>
+
+              <button className="ban-btn">
+                {user.isBanned === false ? "BAN" : "UN-BAN"}
+              </button>
             </div>
           </div>
         ))}

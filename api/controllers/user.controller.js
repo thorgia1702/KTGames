@@ -12,7 +12,7 @@ export const test = (req, res) => {
 export const updateUser = async (req, res, next) => {
   if (
     (req.user.id !== req.params.id) &
-    (req.user.id !== "652dfb3ed4d4a5853e8f8dd0")
+    (req.user.id !== "653679a9e085b01c2a40c08c")
   ) {
     return next(
       errorHandler(401, "You do not have permission to update this user!")
@@ -49,11 +49,11 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== "653537ec22edc6eba8d88aa7")
+  if (req.user.id !== "653679a9e085b01c2a40c08c")
     return next(
       errorHandler(401, "You do not have permission to delete user!")
     );
-  if (req.params.id ==="653537ec22edc6eba8d88aa7"){
+  if (req.params.id === "653679a9e085b01c2a40c08c") {
     return next(
       errorHandler(401, "You do not have permission to delete admin!")
     );
@@ -73,4 +73,16 @@ export const getUsers = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
+};
+
+export const getUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(errorHandler(404, "User not found!"));
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};

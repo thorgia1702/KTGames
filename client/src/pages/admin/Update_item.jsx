@@ -15,6 +15,7 @@ import { CloseSquareFilled } from "@ant-design/icons";
 
 export default function Update_item() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: "",
@@ -164,7 +165,7 @@ export default function Update_item() {
       } else {
         notification.success({
           message: "Success",
-          description: "Item added successfully",
+          description: "Item updated successfully",
         });
         navigate("/items");
       }

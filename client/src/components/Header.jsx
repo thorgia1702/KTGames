@@ -123,7 +123,7 @@ export default function Header() {
               </a>
             </li>
             <li>
-              <a href="/user">
+              <a href="/users">
                 <button className="navbutton">Manage accounts</button>
               </a>
             </li>

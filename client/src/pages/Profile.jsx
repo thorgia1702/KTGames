@@ -46,7 +46,7 @@ export default function Profile() {
   const handleCancel = () => {
     setOpen(false);
   };
-  
+
   const { currentUser, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
