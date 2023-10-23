@@ -270,6 +270,7 @@ export default function Update_item() {
                     className="delete-uploaded"
                     type="button"
                     onClick={() => handleRemoveImage(index)}
+                    disabled={loading || uploading}
                   >
                     DELETE
                   </Button>

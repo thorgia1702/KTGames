@@ -277,8 +277,6 @@ export default function Profile() {
               <input
                 type="number"
                 className="item-information"
-                min="100"
-                max="10000"
                 id="point"
                 onChange={handleChange}
                 value={formData.point}
@@ -311,6 +309,7 @@ export default function Profile() {
                       className="delete-uploaded"
                       type="button"
                       onClick={() => handleRemoveImage(index)}
+                      disabled={loading || uploading}
                     >
                       DELETE
                     </Button>
