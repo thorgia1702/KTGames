@@ -10,11 +10,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../../firebase";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const [open, setOpen] = useState(undefined);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
-  const [deleteItemId, setDeleteItemId] = useState(null); 
+  const [deleteItemId, setDeleteItemId] = useState(null);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -30,8 +31,6 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [showItemsError, setShowItemsError] = useState(false);
   const [items, setItems] = useState([]);
-
-  console.log(formData);
 
   const showErrorModal = (errorMessage) => {
     Modal.error({
@@ -198,15 +197,15 @@ export default function Profile() {
     setDeleteItemId(itemId);
   };
 
-  const confirmDelete = async() => {
+  const confirmDelete = async () => {
     if (deleteItemId) {
       try {
         const res = await fetch(`/api/item/delete/${deleteItemId}`, {
-          method: 'DELETE',
+          method: "DELETE",
         });
         const data = await res.json();
-        
-        if (data.success === false){
+
+        if (data.success === false) {
           const errorMessage = data.message;
           setError(errorMessage);
           showErrorModal("Item deletion failed");
@@ -347,7 +346,9 @@ export default function Profile() {
               >
                 DELETE
               </button>
-              <button className="edit-btn">EDIT</button>
+              <Link to={`/update-item/${item._id}`}>
+                <button className="edit-btn">EDIT</button>
+              </Link>
             </div>
           </div>
         ))}

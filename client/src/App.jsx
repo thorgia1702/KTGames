@@ -18,6 +18,8 @@ import Bingo from "./pages/bingo/Bingo";
 import Admin from "./pages/admin/admin";
 import Manage_items from "./pages/admin/Manage_items";
 import Manage_users from "./pages/admin/Manage_users";
+import Update_item from "./pages/admin/Update_item";
+import Update_user from "./pages/admin/Update_user";
 
 export default function App() {
   return (
@@ -50,6 +52,8 @@ export default function App() {
             <Route path="/admin" element={<Admin />} />
             <Route path="/user" element={<Manage_users />} />
             <Route path="/items" element={<Manage_items />} />
+            <Route path="/update-item/:itemId" element={<Update_item />} />
+            <Route path="/update-user" element={<Update_user />} />
           </Route>
         </Routes>
       </div>
