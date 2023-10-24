@@ -12,7 +12,7 @@ export const test = (req, res) => {
 export const updateUser = async (req, res, next) => {
   if (
     (req.user.id !== req.params.id) &
-    (req.user.role !== "653738b66362ed16d43e137b")
+    (req.user.id !== "653738b66362ed16d43e137b")
   ) {
     return next(
       errorHandler(401, "You do not have permission to update this user!")

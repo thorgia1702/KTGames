@@ -294,5 +294,82 @@ hr {
   filter: invert(100%);
 }
 
+.user-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: #e0dbdb 1px solid;
+  align-items: center;
+  gap: 20px;
+}
 
+.current-user-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: #00ff4c 4px solid;
+  align-items: center;
+  gap: 20px;
+  color: #00ff4c;
+}
 
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px;
+  border: #e0dbdb 1px solid;
+  align-items: center;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.user-information {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100px;
+  font-size: 24px;
+}
+
+.user-information#trophy{
+  font-size: 30px;
+  margin-right: 50px;
+}
+
+.user-information#trophies{
+  margin-right: 65px;
+}
+
+.user-information#name{
+  width: 200px;
+  font-size: 24px;
+}
+
+.user-information#header-name{
+  width: 230px;
+  font-size: 24px;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+}
+
+.user-list{
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.user-rank{
+  margin-left: 30px;
+  font-size: 24px;
+}
+
+.user-rank#number{
+  margin-left: 30px;
+  font-size: 45px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
