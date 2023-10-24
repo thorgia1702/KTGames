@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSocket } from "../../helpers/socket.io";
+import { Link } from "react-router-dom";
 
 export default function admin() {
   // const roomId = 123;
@@ -12,5 +13,8 @@ export default function admin() {
   //   appSocket.on(`roomid:${roomId}`, logging);
   //   return () => appSocket.off(`roomid:${roomId}`);
   // }, [logging]);
-  return <div>admin</div>;
+  return <div>
+    <Link to='/users'><button>Users</button></Link>
+    <Link to='/items'><button>Items</button></Link>
+  </div>;
 }

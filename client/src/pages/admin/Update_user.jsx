@@ -33,6 +33,8 @@ export default function UpdateUser() {
     ktpoint: 0,
     phone: 1234567890,
     role: "",
+    password: "",
+    isBanned: false,
   });
 
   const params = useParams();
@@ -128,17 +130,22 @@ export default function UpdateUser() {
     try {
       setLoading(true);
       setError(false);
+
+      // Create a copy of formData without the 'password' field
+      const formDataWithoutPassword = { ...formData };
+      delete formDataWithoutPassword.password;
+
       const res = await fetch(`/api/user/update/${params.userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formDataWithoutPassword), // Send the modified formData
       });
       const data = await res.json();
       setLoading(false);
       if (data.success === false) {
         const errorMessage = data.message;
         setError(errorMessage);
-        showErrorModal("User have already existed");
+        showErrorModal(data.message);
       } else {
         notification.success({
           message: "Success",
@@ -221,6 +228,38 @@ export default function UpdateUser() {
               id="phone"
               onChange={handleChange}
             ></input>
+
+            <p>Trophy:</p>
+            <input
+              type="number"
+              placeholder="Phone"
+              value={formData.trophy}
+              className="edit-text"
+              id="trophy"
+              onChange={handleChange}
+            ></input>
+
+            <p>Kt Point:</p>
+            <input
+              type="number"
+              placeholder="Phone"
+              value={formData.ktpoint}
+              className="edit-text"
+              id="ktpoint"
+              onChange={handleChange}
+            ></input>
+
+            <p>Role:</p>
+            <select
+              className="edit-text"
+              value={formData.role}
+              onChange={(e) =>
+                setFormData({ ...formData, role: e.target.value })
+              }
+            >
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </select>
 
             <br />
             <button type="submit" disabled={loading} className="updatebtn">

@@ -84,6 +84,17 @@ export default function Manage_users() {
     <div>
       <h1>Manage users</h1>
       <div className="list-of-users">
+        <div className="column-header">
+          <p className="item-name">ㅤㅤAvatar</p>
+          <p className="item-name">Username</p>
+          <p className="item-name">Email</p>
+          <p className="item-name">Phone</p>
+          <p className="item-name">Trophy</p>
+          <p className="item-name">Kt point</p>
+          <p className="item-name">Role</p>
+          <p className="item-name">Status</p>
+          <p className="item-name">ㅤㅤAction</p>
+        </div>
         {users.map((user) => (
           <div key={user._id} className="item-card">
             <img src={user.avatar} alt="item image" className="item-image" />
@@ -92,6 +103,7 @@ export default function Manage_users() {
             <p className="item-name">{user.phone}</p>
             <p className="item-name">{user.trophy}</p>
             <p className="item-name">{user.ktpoint}</p>
+            <p className="item-name">{user.role}</p>
             <p className="item-name">
               {user.isBanned === false ? "Un-ban" : "Banned"}
             </p>

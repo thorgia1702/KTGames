@@ -86,12 +86,7 @@ textarea {
     object-fit: contain;
 }
 
-.item-name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    flex: 1 1 0%;
-}
+
 
 .delete-btn{
     background-color: rgb(214, 40, 40);
@@ -115,6 +110,37 @@ textarea {
     margin-right: auto;
  }
 
+ .list-of-items{
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+ }
+
  .ban-btn{
     background-color: rgb(160, 0, 253);
  }
+
+ .column-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border: #e0dbdb 1px solid;
+    border-radius: 8px;
+    align-items: center;
+    margin-top: 20px;
+    gap: 20px;
+}
+
+.item-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
+}
+
+.item-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 250px;
+}

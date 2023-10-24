@@ -233,7 +233,7 @@ export default function Profile() {
   };
 
   return (
-    <div className="profile-page">
+    <div className="list-of-items">
       <h1>Manage item</h1>
 
       <div className="add-item">
@@ -330,6 +330,13 @@ export default function Profile() {
       </div>
 
       <div className="list-of-item">
+        <div className="column-header">
+          <p className="item-name">ㅤㅤImage</p>
+          <p className="item-name">Name</p>
+          <p className="item-name">Point</p>
+          <p className="item-description">Description</p>
+          <p className="item-name">ㅤㅤAction</p>
+        </div>
         {items.map((item) => (
           <div key={item._id} className="item-card">
             <img
@@ -338,6 +345,8 @@ export default function Profile() {
               className="item-image"
             />
             <p className="item-name">{item.name}</p>
+            <p className="item-name">{item.point}</p>
+            <p className="item-description">{item.description}</p>
             <div className="btn">
               <button
                 onClick={() => handleDeleteItem(item._id)}

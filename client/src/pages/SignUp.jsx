@@ -45,7 +45,7 @@ export default function SignUp() {
         // Display the error message as a popup
         notification.error({
           message: "Error",
-          description: "User already exists!, please choose another email",
+          description: "User already exists!, please choose another name or email",
         });
 
         return;

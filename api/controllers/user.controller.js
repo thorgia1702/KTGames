@@ -12,7 +12,7 @@ export const test = (req, res) => {
 export const updateUser = async (req, res, next) => {
   if (
     (req.user.id !== req.params.id) &
-    (req.user.id !== "653679a9e085b01c2a40c08c")
+    (req.user.role !== "653738b66362ed16d43e137b")
   ) {
     return next(
       errorHandler(401, "You do not have permission to update this user!")
@@ -22,10 +22,6 @@ export const updateUser = async (req, res, next) => {
     if (req.body.password) {
       req.body.password = bcryptjs.hashSync(req.body.password, 10);
     }
-
-    // const roomId = 123;
-    // io.emit(`roomid:${roomId}`, { message: "message" });
-
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,
       {
@@ -35,6 +31,9 @@ export const updateUser = async (req, res, next) => {
           password: req.body.password,
           avatar: req.body.avatar,
           phone: req.body.phone,
+          role: req.body.role,
+          ktpoint: req.body.ktpoint,
+          trophy: req.body.trophy,
         },
       },
       { new: true }
@@ -49,11 +48,11 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== "653679a9e085b01c2a40c08c")
+  if (req.user.id !== "653738b66362ed16d43e137b")
     return next(
-      errorHandler(401, "You do not have permission to delete user!")
+      errorHandler(401, "You do not have permission to delete this user!")
     );
-  if (req.params.id === "653679a9e085b01c2a40c08c") {
+  if (req.params.id === "653738b66362ed16d43e137b") {
     return next(
       errorHandler(401, "You do not have permission to delete admin!")
     );
