@@ -4,9 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function Leaderboard() {
   const [leaderboardUsers, setLeaderboardUsers] = useState([]);
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState([]);
   const [showUsersError, setShowUsersError] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const showUsers = async () => {
@@ -40,7 +37,9 @@ export default function Leaderboard() {
           <p className="user-information" id="header-name">
             Username
           </p>
-          <p className="user-information" id="trophies">Trophies</p>
+          <p className="user-information" id="trophies">
+            Trophies
+          </p>
         </div>
         {leaderboardUsers.map((user, index) => (
           <div
@@ -56,7 +55,9 @@ export default function Leaderboard() {
             <p className="user-information" id="name">
               {user.username}
             </p>
-            <p className="user-information" id="trophy">{user.trophy}</p>
+            <p className="user-information" id="trophy">
+              {user.trophy}
+            </p>
           </div>
         ))}
       </div>

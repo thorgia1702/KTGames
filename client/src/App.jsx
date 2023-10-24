@@ -20,10 +20,13 @@ import Manage_items from "./pages/admin/Manage_items";
 import Manage_users from "./pages/admin/Manage_users";
 import Update_item from "./pages/admin/Update_item";
 import Update_user from "./pages/admin/Update_user";
+import Item_information from "./pages/Item_information";
+import ScrollToTop from "./Scroll_To_Top";
 
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Header />
       <div style={{ minHeight: 500 }}>
         <Routes>
@@ -45,6 +48,7 @@ export default function App() {
               path="/tic-tac-toe-online"
               element={<Tic_tac_toe_online />}
             />
+            <Route path="/view-item/:itemId" element={<Item_information />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
 

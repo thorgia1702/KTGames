@@ -159,7 +159,7 @@ export default function Profile() {
           <p>Username: {currentUser.username}</p>
           <p>Email: {currentUser.email}</p>
           <p>Phone: {currentUser.phone}</p>
-          <p>Rank: {currentUser.rank}</p>
+          <p>Trophies: {currentUser.trophy}</p>
           <p>KT points: {currentUser.ktpoint}</p>
         </div>
       </div>
