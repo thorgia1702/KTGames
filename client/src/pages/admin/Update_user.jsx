@@ -24,7 +24,7 @@ export default function UpdateUser() {
   const [open, setOpen] = useState(false);
   const [filePerc, setFilePerc] = useState(0);
   const [error, setError] = useState(false);
-
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -147,6 +147,7 @@ export default function UpdateUser() {
         setError(errorMessage);
         showErrorModal(data.message);
       } else {
+        dispatch(updateUserSuccess(data));
         notification.success({
           message: "Success",
           description: "User updated successfully",

@@ -136,6 +136,20 @@ export default function Profile() {
     }
   };
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userId = currentUser._id;
+      const res = await fetch(`/api/user/get/${userId}`);
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
+    fetchUser();
+  }, []);
+
   // const roomId = 123;
   // const { appSocket } = useSocket();
   // const [newData, setNewData] = useState("");

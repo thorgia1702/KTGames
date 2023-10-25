@@ -4,6 +4,7 @@ import Board from "./Board";
 import "./tictactoe.css";
 import { calculateWinnerOffline } from "../../game_logics";
 import { Button, Modal, message } from "antd";
+import { Link } from "react-router-dom";
 
 export default function Tic_tac_toe_offline() {
   const [board, setBoard] = useState(Array(100).fill(null));
@@ -27,12 +28,7 @@ export default function Tic_tac_toe_offline() {
 
   const handleResetGame = () => {
     setBoard(Array(100).fill(null));
-    setIsWinnerModalVisible(false)
-  };
-
-  const handleBackToMainMenu = () => {
-    // Implement your logic to go back to the main menu
-    // This could involve routing or other relevant functionality.
+    setIsWinnerModalVisible(false);
   };
 
   return (
@@ -56,6 +52,9 @@ export default function Tic_tac_toe_offline() {
         <Button type="default" onClick={handleResetGame}>
           Reset Board
         </Button>
+        <Link to={'/'}>
+          <Button>Home</Button>
+        </Link>
       </Modal>
     </div>
   );
