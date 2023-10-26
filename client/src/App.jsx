@@ -12,7 +12,7 @@ import AdminRoute from "./components/AdminRoute";
 import Ktshop from "./pages/Ktshop";
 import Leaderboard from "./pages/Leaderboard";
 import Tic_tac_toe_offline from "./pages/tictactoe/Tic_tac_toe_offline";
-import Tic_tac_toe_online from "./pages/tictactoe/Tic_tac_toe_online";
+import Tic_tac_toe_online from "./pages/tictactoe/TIc_tac_toe_online";
 import Tic_tac_toe from "./pages/tictactoe/Tic_tac_toe";
 import Bingo from "./pages/bingo/Bingo";
 import Admin from "./pages/admin/admin";

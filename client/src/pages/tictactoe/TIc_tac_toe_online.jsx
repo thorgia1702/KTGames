@@ -37,7 +37,6 @@ export default function Tic_tac_toe_online() {
       setOpponentName(opponent);
     });
 
-    // Handle opponent disconnection
     appSocket.on("playerDisconnected", () => {
       setIsConnected(false);
       setOpponentName(null);
@@ -54,16 +53,19 @@ export default function Tic_tac_toe_online() {
 
   const handleClick = (index) => {
     const boardCopy = [...board];
-    if (
-      winner ||
-      boardCopy[index] ||
-      !isConnected ||
-      xIsNext !== currentUser.username
-    )
+    if (winner) {
       return;
+    }
+    if (boardCopy[index]) {
+      return;
+    }
+
+    if (!isConnected) {
+      return;
+    }
+
     boardCopy[index] = xIsNext ? "✖" : "○";
     appSocket.emit("move", { roomId, board: boardCopy });
-    // Update xIsNext only if it's the player's turn
     if (currentUser.username === xIsNext) {
       setXIsNext(!xIsNext);
     }
@@ -82,15 +84,17 @@ export default function Tic_tac_toe_online() {
 
       {isConnected ? (
         <div>
-          <p>
-            {opponentName
-              ? `Opponent: ${opponentName}`
-              : "Waiting for opponent..."}
-          </p>
-          <p>Who's turn: {xIsNext ? opponentName : currentUser.username}</p>
-          <div className="game-container">
-            <Board cells={board} onClick={handleClick}></Board>
-          </div>
+          {opponentName ? (
+            <div>
+              <p>Opponent: {opponentName}</p>
+              <p>Who's turn: {xIsNext ? opponentName : currentUser.username}</p>
+              <div className="game-container">
+                <Board cells={board} onClick={handleClick}></Board>
+              </div>
+            </div>
+          ) : (
+            <p>Waiting for opponent...</p>
+          )}
         </div>
       ) : (
         <button
@@ -105,7 +109,7 @@ export default function Tic_tac_toe_online() {
       <Modal
         title="Winner"
         centered
-        visible={isWinnerModalVisible}
+        open={isWinnerModalVisible}
         onOk={() => setIsWinnerModalVisible(false)}
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[]}

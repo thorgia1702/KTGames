@@ -43,7 +43,7 @@ export default function Tic_tac_toe_offline() {
       <Modal
         title="Winner"
         centered
-        visible={isWinnerModalVisible}
+        open={isWinnerModalVisible}
         onOk={() => setIsWinnerModalVisible(false)}
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[]}
