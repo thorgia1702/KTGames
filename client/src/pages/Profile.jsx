@@ -18,7 +18,6 @@ import {
   updateUserFailure,
 } from "../redux/user/userSlice";
 import { useDispatch } from "react-redux";
-import { useSocket } from "../helpers/socket.io";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -91,7 +90,6 @@ export default function Profile() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (formData.password && formData.password.length < 8) {
-      // Check if a password is provided and it's less than 8 characters
       notification.error({
         message: "Error",
         description: "Password must be at least 8 characters long",
@@ -150,21 +148,9 @@ export default function Profile() {
     fetchUser();
   }, []);
 
-  // const roomId = 123;
-  // const { appSocket } = useSocket();
-  // const [newData, setNewData] = useState("");
-  // const logging = (data) => {
-  //   setNewData(data.message);
-  // };
-  // useEffect(() => {
-  //   appSocket.on(`roomid:${roomId}`, logging);
-  //   return () => appSocket.off(`roomid:${roomId}`);
-  // }, [logging]);
-
   return (
     <div className="profile-page">
       <h1>Profile</h1>
-      {/* <h3>{newData}</h3> */}
       <div className="profile-container">
         <div className="profile-header">
           <img src={currentUser.avatar} className="avatar" />

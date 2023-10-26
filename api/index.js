@@ -5,7 +5,6 @@ import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import itemRouter from "./routes/item.route.js";
 import cookieParser from "cookie-parser";
-import { Server } from "socket.io";
 
 dotenv.config();
 import { createServer } from "http";
