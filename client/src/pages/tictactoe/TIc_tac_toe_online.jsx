@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 export default function Tic_tac_toe_online() {
   const { appSocket } = useSocket();
   const [board, setBoard] = useState(Array(100).fill(null));
-  const [xIsNext, setXIsNext] = useState(true);
+  const [isPlayerX, setIsPlayerX] = useState(false);
   const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
   const [roomId, setRoomId] = useState(null);
   const [opponentName, setOpponentName] = useState(null);
@@ -19,6 +19,7 @@ export default function Tic_tac_toe_online() {
   const winner = calculateWinner(board);
 
   const [isConnected, setIsConnected] = useState(false);
+  const [currentPlayer, setCurrentPlayer] = useState("X"); // Track the current player's turn
 
   const handleConnectPlayers = () => {
     appSocket.emit("joinRoom", roomId, currentUser.username);
@@ -30,11 +31,22 @@ export default function Tic_tac_toe_online() {
       setBoard(updatedBoard);
       if (calculateWinner(updatedBoard)) {
         setIsWinnerModalVisible(true);
+      } else {
+        // Update the current player's turn based on the number of "X" and "O" symbols
+        const xCount = updatedBoard.filter((cell) => cell === "✖").length;
+        const oCount = updatedBoard.filter((cell) => cell === "○").length;
+        if (xCount === oCount) {
+          setCurrentPlayer("X");
+        } else {
+          setCurrentPlayer("○");
+        }
       }
     });
 
     appSocket.on("startGame", (opponent) => {
-      setOpponentName(opponent);
+      setOpponentName(opponent.find((name) => name !== currentUser.username));
+      const index = opponent.indexOf(currentUser.username);
+      setIsPlayerX(index === 0);
     });
 
     appSocket.on("playerDisconnected", () => {
@@ -42,40 +54,28 @@ export default function Tic_tac_toe_online() {
       setOpponentName(null);
       setBoard(Array(100).fill(null));
       setIsWinnerModalVisible(false);
-      setXIsNext(true);
+      setIsPlayerX(false);
+      setCurrentPlayer("X");
     });
 
     return () => {
       appSocket.off("gameUpdate");
       appSocket.off("startGame");
     };
-  }, [appSocket]);
+  }, [appSocket, currentUser]);
 
   const handleClick = (index) => {
     const boardCopy = [...board];
-    if (winner) {
+    if (winner || !isConnected) {
       return;
     }
     if (boardCopy[index]) {
       return;
     }
 
-    if (!isConnected) {
-      return;
-    }
-
-    boardCopy[index] = xIsNext ? "✖" : "○";
+    const symbol = isPlayerX ? "✖" : "○";
+    boardCopy[index] = symbol;
     appSocket.emit("move", { roomId, board: boardCopy });
-    if (currentUser.username === xIsNext) {
-      setXIsNext(!xIsNext);
-    }
-  };
-
-  const handleResetGame = () => {
-    setBoard(Array(100).fill(null));
-    setIsWinnerModalVisible(false);
-    setOpponentName(null);
-    appSocket.emit("newMatch", roomId);
   };
 
   return (
@@ -87,7 +87,8 @@ export default function Tic_tac_toe_online() {
           {opponentName ? (
             <div>
               <p>Opponent: {opponentName}</p>
-              <p>Who's turn: {xIsNext ? opponentName : currentUser.username}</p>
+              <p>You play as: {isPlayerX ? "X" : "○"}</p>
+              <p>Who's Turn: {currentPlayer}</p>
               <div className="game-container">
                 <Board cells={board} onClick={handleClick}></Board>
               </div>
@@ -115,9 +116,9 @@ export default function Tic_tac_toe_online() {
         footer={[]}
       >
         <p>Winner is {winner}</p>
-        <Button type="default" onClick={handleConnectPlayers}>
-          New match
-        </Button>
+        <Link to={"/tic-tac-toe"}>
+          <Button>New match</Button>
+        </Link>
         <Link to={"/"}>
           <Button>Home</Button>
         </Link>

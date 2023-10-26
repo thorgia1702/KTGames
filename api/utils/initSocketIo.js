@@ -28,7 +28,10 @@ export default function initSocketIo(httpServer) {
 
         if (room.players.length === 2) {
           // Start the game
-          io.to(roomId).emit("startGame", room.players[0].name);
+          io.to(roomId).emit("startGame", [
+            room.players[0].name,
+            room.players[1].name,
+          ]);
         }
       }
     });
@@ -39,7 +42,9 @@ export default function initSocketIo(httpServer) {
         const { board } = data;
         room.board = board;
         io.to(socket.roomId).emit("gameUpdate", board);
-        room.currentPlayer = 1 - room.currentPlayer; // Toggle between 0 and 1
+
+        // Switch to the other player's turn
+        room.currentPlayer = 1 - room.currentPlayer;
       }
     });
 
@@ -47,13 +52,12 @@ export default function initSocketIo(httpServer) {
       const room = rooms.get(socket.roomId);
       room.board = Array(100).fill(null);
       room.currentPlayer = 0;
-      io.to(socket.roomId).emit("gameUpdate", room.board); // Send a reset board message
+      io.to(socket.roomId).emit("gameUpdate", room.board);
     });
 
     socket.on("disconnect", () => {
       const room = rooms.get(socket.roomId);
       if (room) {
-        // Handle player disconnections and clean up the game state
         io.to(socket.roomId).emit("playerDisconnected");
         rooms.delete(socket.roomId);
       }
