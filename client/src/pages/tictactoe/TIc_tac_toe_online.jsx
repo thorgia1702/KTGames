@@ -6,30 +6,53 @@ import { Button, Modal, message } from "antd";
 import { Link } from "react-router-dom";
 import { useSocket } from "../../helpers/socket.io/index";
 import { calculateWinner } from "../../game_logics";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  updateUserSuccess,
+  updateUserFailure,
+  updateUserStart,
+} from "../../redux/user/userSlice";
+import Searching from "../../images/loop2.gif";
 
 export default function Tic_tac_toe_online() {
   const { appSocket } = useSocket();
   const [board, setBoard] = useState(Array(100).fill(null));
   const [isPlayerX, setIsPlayerX] = useState(false);
   const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
+  const [isDraw, setIsDraw] = useState(false);
   const [roomId, setRoomId] = useState(null);
   const [opponentName, setOpponentName] = useState(null);
+  const [opponentId, setOpponentId] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const winner = calculateWinner(board);
-
+  const dispatch = useDispatch();
   const [isConnected, setIsConnected] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState("X"); // Track the current player's turn
+  const [currentPlayer, setCurrentPlayer] = useState("X");
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    avatar: "",
+    trophy: 0,
+    ktpoint: 0,
+    phone: 1234567890,
+    role: "",
+    password: "",
+    status: "",
+  });
 
   const handleConnectPlayers = () => {
-    appSocket.emit("joinRoom", roomId, currentUser.username);
+    appSocket.emit("joinRoom", roomId, currentUser._id);
     setIsConnected(true);
   };
 
   useEffect(() => {
     appSocket.on("gameUpdate", (updatedBoard) => {
       setBoard(updatedBoard);
-      if (calculateWinner(updatedBoard)) {
+
+      // Check for a draw
+      if (updatedBoard.every((cell) => cell !== null)) {
+        setIsDraw(true);
+      } else if (calculateWinner(updatedBoard)) {
         setIsWinnerModalVisible(true);
       } else {
         // Update the current player's turn based on the number of "X" and "O" symbols
@@ -43,15 +66,30 @@ export default function Tic_tac_toe_online() {
       }
     });
 
-    appSocket.on("startGame", (opponent) => {
-      setOpponentName(opponent.find((name) => name !== currentUser.username));
-      const index = opponent.indexOf(currentUser.username);
+    appSocket.on("startGame", async (opponent) => {
+      const opponentId = opponent.find(
+        (playerId) => playerId !== currentUser._id
+      );
+      setOpponentId(opponentId);
+      try {
+        const res = await fetch(`/api/user/get/${opponentId}`);
+        const data = await res.json();
+        if (data.success === false) {
+          console.log(data.message);
+          return;
+        }
+        setFormData(data);
+      } catch (error) {
+        console.error("Error fetching opponent name:", error);
+      }
+
+      const index = opponent.indexOf(currentUser._id);
       setIsPlayerX(index === 0);
     });
 
     appSocket.on("playerDisconnected", () => {
       setIsConnected(false);
-      setOpponentName(null);
+      setOpponentId(null);
       setBoard(Array(100).fill(null));
       setIsWinnerModalVisible(false);
       setIsPlayerX(false);
@@ -66,40 +104,80 @@ export default function Tic_tac_toe_online() {
 
   const handleClick = (index) => {
     const boardCopy = [...board];
-    if (winner || !isConnected) {
-      return;
-    }
-    if (boardCopy[index]) {
+    if (winner || !isConnected || boardCopy[index]) {
       return;
     }
 
     const symbol = isPlayerX ? "✖" : "○";
     boardCopy[index] = symbol;
     appSocket.emit("move", { roomId, board: boardCopy });
+
+    const winningSymbol = calculateWinner(boardCopy);
+
+    if (winningSymbol === "✖" || winningSymbol === "○") {
+      const newKtPoints = currentUser.ktpoint + 10;
+      const newTrophies = currentUser.trophy + 1;
+
+      fetch(`/api/user/update/${currentUser._id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ktpoint: newKtPoints,
+          trophy: newTrophies,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success === false) {
+            dispatch(updateUserFailure(data.message));
+          } else {
+            dispatch(updateUserSuccess(data));
+            setIsWinnerModalVisible(true);
+          }
+        })
+        .catch((error) => {
+          dispatch(updateUserFailure(error.message));
+        });
+    }
   };
 
   return (
     <div>
-      <h1>Tic Tac Toe</h1>
+      <h1>Tic Tac Toe Online</h1>
 
       {isConnected ? (
         <div>
-          {opponentName ? (
-            <div>
-              <p>Opponent: {opponentName}</p>
-              <p>You play as: {isPlayerX ? "X" : "○"}</p>
-              <p>Who's Turn: {currentPlayer}</p>
+          {opponentId ? (
+            <div className="game-in4-ctn">
+              <div>
+                <p className="game-in4">Your opponent: {formData.username}</p>
+                <p className="game-in4">You play as: {isPlayerX ? "X" : "○"}</p>
+              </div>
               <div className="game-container">
+                <p className="game-in4">Who's Turn: {currentPlayer}</p>
                 <Board cells={board} onClick={handleClick}></Board>
               </div>
             </div>
           ) : (
-            <p>Waiting for opponent...</p>
+            <div className="waiting-ctn">
+              <p className="waiting">Waiting for opponent...</p>
+              <img
+                className="waiting"
+                id="img"
+                src={Searching}
+                alt="tictactoe"
+                height={300}
+                width={300}
+              />
+            </div>
           )}
         </div>
       ) : (
         <button
-          className="connect-button"
+          className="navbutton"
+          id="tic-tac-toe-online"
           onClick={handleConnectPlayers}
           disabled={isConnected}
         >
@@ -108,14 +186,14 @@ export default function Tic_tac_toe_online() {
       )}
 
       <Modal
-        title="Winner"
+        title={isDraw ? "Draw" : "Winner"}
         centered
-        open={isWinnerModalVisible}
+        open={isWinnerModalVisible || isDraw}
         onOk={() => setIsWinnerModalVisible(false)}
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[]}
       >
-        <p>Winner is {winner}</p>
+        {isDraw ? <p>It's a draw!</p> : <p>Winner is {winner}</p>}
         <Link to={"/tic-tac-toe"}>
           <Button>New match</Button>
         </Link>

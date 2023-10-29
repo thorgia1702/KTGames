@@ -11,10 +11,10 @@ export default function initSocketIo(httpServer) {
   });
 
   io.on("connection", (socket) => {
-    socket.on("joinRoom", (roomId, name) => {
+    socket.on("joinRoom", (roomId, playerId) => {
       socket.join(roomId);
       socket.roomId = roomId;
-      socket.name = name;
+      socket.playerId = playerId;
 
       if (!rooms.has(roomId)) {
         rooms.set(roomId, {
@@ -29,8 +29,8 @@ export default function initSocketIo(httpServer) {
         if (room.players.length === 2) {
           // Start the game
           io.to(roomId).emit("startGame", [
-            room.players[0].name,
-            room.players[1].name,
+            room.players[0].playerId,
+            room.players[1].playerId,
           ]);
         }
       }

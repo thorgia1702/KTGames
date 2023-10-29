@@ -13,10 +13,47 @@ import Cs2 from "../images/cs2.png";
 import { useDispatch, useSelector } from "react-redux";
 import Usermanage from "../images/user-manage.png";
 import Itemmanage from "../images/item-manage.png";
+import { Button, Modal, notification } from "antd";
+import {
+  signOutFailure,
+  signOutSuccess,
+  signOutStart,
+} from "../redux/user/userSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
+  const [showBannedPopup, setShowBannedPopup] = useState(false);
   const [slideIndex, setSlideIndex] = useState(1);
   const { currentUser } = useSelector((state) => state.user);
+
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch("/api/auth/signout");
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess());
+    } catch (error) {
+      dispatch(signOutFailure(data.message));
+    }
+  };
+
+  useEffect(() => {
+    if (currentUser && currentUser.status === 'banned') {
+      setShowBannedPopup(true);
+    }
+  }, [currentUser]);
+
+  const closeBannedPopup = () => {
+    // Close the popup and sign out the user
+    setShowBannedPopup(false);
+    handleSignOut();
+  };
+
+  
 
   const plusSlides = (n) => {
     showSlides(slideIndex + n);
@@ -57,6 +94,21 @@ export default function Home() {
 
   return (
     <div>
+      <Modal
+        title="You have been banned from the website"
+        open={showBannedPopup}
+        onOk={closeBannedPopup}
+        onCancel={closeBannedPopup}
+        centered
+        footer={[
+          <Button key="ok" type="primary" onClick={closeBannedPopup}>
+            OK
+          </Button>,
+        ]}
+      >
+        <p>Please note that you have been banned from using our website.</p>
+      </Modal>
+
       {currentUser && currentUser.role === "admin" ? (
         <h1>Welcome to KTGames Management site</h1>
       ) : (

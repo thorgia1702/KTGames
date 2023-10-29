@@ -1,16 +1,17 @@
 import React from "react";
-import Cell from "./Cell";
+import Bingo_cell from "./Bingo_cell";
 
-export default function Board(props) {
+export default function Bingo_board(props) {
+  
   return (
     <div className="game-board">
       {props.cells.map((item, index) => (
-        <Cell
+        <Bingo_cell
           key={index}
           value={item}
           onClick={() => props.onClick(index)}
-          className={item === "✖" ? "is-x" : item === "○" ? "is-o" : ""}
-        ></Cell>
+          className="Called-cell"
+        ></Bingo_cell>
       ))}
     </div>
   );

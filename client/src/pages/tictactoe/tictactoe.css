@@ -1,16 +1,15 @@
-.game-board{
-    margin-left: 200px;
+.game-board {
+    margin-right: auto;
+    margin-left: auto;
     margin-bottom: 30px;
     width: 500px;
     height: 500px;
-    
     display: grid;
-    grid-gap: 10px;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
 }
 
-.game-cell{
+.game-cell {
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -18,34 +17,106 @@
     font-weight: bold;
     font-size: 22px;
     border: 1px solid #ccc;
-    border-radius: 5px;
     background-color: #0e1e1e;
 }
 
-.game-cell:hover{
-    border-radius: 8px;
-    border-color: #cbc210;
+.game-cell:hover {
+    border: #000000 solid 2px;
+    border-color: #fff200;
 }
 
-.game-cell.is-x{
+.game-cell.is-x {
     color: #4cbe84;
 }
 
-.game-cell.is-o{
-    color: rgba(229,69,60,255);
+.game-cell.is-o {
+    color: rgba(229, 69, 60, 255);
 }
 
-.game-cell.is-x:hover{
-    border-radius: 5px;
-    border-color: rgb(212, 214, 216);
+.game-cell.is-x:hover {
+    background-color: rgb(64, 132, 132);
 }
 
-.game-cell.is-o:hover{
-    border-radius: 5px;
-    border-color: rgb(212, 214, 216);
+.game-cell.is-o:hover {
+    background-color: rgb(64, 132, 132);
 }
 
-.reset-button{
+.reset-button {
     margin-left: 380px;
     background-color: black;
+}
+
+.navbutton#tic-tac-toe {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    height: 100px;
+    margin-bottom: 50px;
+    background-color: black;
+    font-size: 24px;
+}
+
+.navbutton#tic-tac-toe-online {
+    text-align: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+    height: 100px;
+    margin-top: 150px;
+    background-color: black;
+    font-size: 24px;
+}
+
+.btn-ctn {
+    margin-top: 150px;
+}
+
+.waiting-ctn {
+    width: 350px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.waiting#img {
+    text-align: center;
+    font-size: 24px;
+}
+
+.waiting {
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-in4-ctn {
+    margin-left: 50px;
+    margin-right: 50px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.game-in4 {
+    font-size: 30px;
+    margin-left: 50px;
+
+}
+
+.game-container {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px;
+}
+
+.game-btn {
+    margin-top: 30px;
+    margin-left: 50px;
+    width: 300px;
+    height: 70px;
+    background-color: #000000;
+    font-size: 24px;
 }

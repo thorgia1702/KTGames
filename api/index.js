@@ -5,10 +5,11 @@ import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import itemRouter from "./routes/item.route.js";
 import cookieParser from "cookie-parser";
-
-dotenv.config();
+import { createDefaultAdmin } from "./controllers/auth.controller.js";
 import { createServer } from "http";
 import initSocketIo from "./utils/initSocketIo.js";
+
+dotenv.config();
 
 mongoose
   .connect(process.env.MONGO)
@@ -42,6 +43,15 @@ app.use((err, req, res, next) => {
 
 const httpServer = createServer(app);
 initSocketIo(httpServer);
+
+createDefaultAdmin()
+  .then(() => {
+    console.log("Default admin account already exists!");
+  })
+  .catch((error) => {
+    console.error("Error creating default admin account:", error);
+  });
+
 httpServer.listen(3000, () => {
   console.log("Server is running on port 3000");
 });

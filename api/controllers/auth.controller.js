@@ -75,3 +75,33 @@ export const signOut = async (req, res, next) => {
     next(error);
   }
 };
+
+export const createDefaultAdmin = async () => {
+  try {
+    // Check if an admin account already exists
+    const adminExists = await User.findOne({ role: "admin" });
+
+    if (adminExists) {
+      console.log("Admin account already exists!");
+      return;
+    }
+
+    // Create a new admin account
+    const adminData = {
+      username: "admin",  // Set the admin username
+      email: "admin@gmail.com",  // Set the admin email
+      password: "12345678", // Set the admin password (hashed using bcrypt)
+      role: "admin",  // Set the role to 'admin'
+    };
+
+    const hashedPassword = bcryptjs.hashSync(adminData.password, 10);
+    const adminUser = new User({ ...adminData, password: hashedPassword });
+
+    await adminUser.save();
+
+    console.log("Admin account created successfully");
+  } catch (error) {
+    console.error('Error creating default admin account:', error);
+  }
+};
+

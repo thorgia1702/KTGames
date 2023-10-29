@@ -13,9 +13,9 @@ import {
   updateUserSuccess,
   updateUserFailure,
 } from "../../redux/user/userSlice";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 export default function UpdateUser() {
+  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const fileRef = useRef(null);
   const [file, setFile] = useState(null);
@@ -34,15 +34,13 @@ export default function UpdateUser() {
     phone: 1234567890,
     role: "",
     password: "",
-    isBanned: false,
+    status: "",
   });
 
   const params = useParams();
-
   const showModal = () => {
     setOpen(true);
   };
-
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
@@ -51,7 +49,6 @@ export default function UpdateUser() {
       navigate("/users");
     }, 3000);
   };
-
   const showErrorModal = (errorMessage) => {
     Modal.error({
       title: "Error",
@@ -59,25 +56,21 @@ export default function UpdateUser() {
       centered: true,
     });
   };
-
   const handleCancel = () => {
     setOpen(false);
     navigate("/users");
   };
-
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
     }
   }, [file]);
-
   const handleFileUpload = (file) => {
     const storage = getStorage(app);
     const fileName =
       new Date().getTime() + file.name + Math.random().toString(36).slice(-8);
     const storageRef = ref(storage, fileName);
     const uploadTask = uploadBytesResumable(storageRef, file);
-
     uploadTask.on(
       "state_changed",
       (snapshot) => {
@@ -95,11 +88,9 @@ export default function UpdateUser() {
       }
     );
   };
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
-
   useEffect(() => {
     const fetchUser = async () => {
       const userId = params.userId;
@@ -113,11 +104,9 @@ export default function UpdateUser() {
     };
     fetchUser();
   }, []);
-
   useEffect(() => {
     showModal();
   }, []);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!/^\d{10}$/.test(formData.phone)) {
@@ -138,6 +127,7 @@ export default function UpdateUser() {
       const res = await fetch(`/api/user/update/${params.userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
         body: JSON.stringify(formDataWithoutPassword), // Send the modified formData
       });
       const data = await res.json();
@@ -145,14 +135,17 @@ export default function UpdateUser() {
       if (data.success === false) {
         const errorMessage = data.message;
         setError(errorMessage);
+        showErrorModal("User have already existed");
         showErrorModal(data.message);
       } else {
-        dispatch(updateUserSuccess(data));
         notification.success({
           message: "Success",
           description: "User updated successfully",
         });
         navigate("/users");
+      }
+      if (formData.username === currentUser.username) {
+        dispatch(updateUserSuccess(data));
       }
     } catch (error) {
       notification.error({
@@ -161,7 +154,6 @@ export default function UpdateUser() {
       });
     }
   };
-
   return (
     <div className="profile-actions">
       <Modal
@@ -209,7 +201,6 @@ export default function UpdateUser() {
               id="username"
               onChange={handleChange}
             ></input>
-
             <p>Email:</p>
             <input
               type="text"
@@ -219,7 +210,6 @@ export default function UpdateUser() {
               id="email"
               onChange={handleChange}
             ></input>
-
             <p>Phone number:</p>
             <input
               type="text"
@@ -262,7 +252,18 @@ export default function UpdateUser() {
               <option value="user">User</option>
             </select>
 
-            <br />
+            <p>Status:</p>
+            <select
+              className="edit-text"
+              value={formData.status}
+              onChange={(e) =>
+                setFormData({ ...formData, status: e.target.value })
+              }
+            >
+              <option value="active">Active</option>
+              <option value="banned">Ban</option>
+            </select>
+
             <button type="submit" disabled={loading} className="updatebtn">
               {loading ? "LOADING..." : "UPDATE"}
             </button>

@@ -95,36 +95,32 @@ export default function Manage_users() {
           <p className="item-name">Status</p>
           <p className="item-name">ㅤㅤAction</p>
         </div>
-        {users.map((user) => (
-          <div key={user._id} className="item-card">
-            <img src={user.avatar} alt="item image" className="item-image" />
-            <p className="item-name">{user.username}</p>
-            <p className="item-name">{user.email}</p>
-            <p className="item-name">{user.phone}</p>
-            <p className="item-name">{user.trophy}</p>
-            <p className="item-name">{user.ktpoint}</p>
-            <p className="item-name">{user.role}</p>
-            <p className="item-name">
-              {user.isBanned === false ? "Un-ban" : "Banned"}
-            </p>
-            <div className="btn">
-              <button
-                onClick={() => handleDeleteUser(user._id)}
-                className="delete-btn"
-              >
-                DELETE
-              </button>
+        {users
+          .filter((user) => user.username !== "admin")
+          .map((user) => (
+            <div key={user._id} className="item-card">
+              <img src={user.avatar} alt="item image" className="item-image" />
+              <p className="item-name">{user.username}</p>
+              <p className="item-name">{user.email}</p>
+              <p className="item-name">{user.phone}</p>
+              <p className="item-name">{user.trophy}</p>
+              <p className="item-name">{user.ktpoint}</p>
+              <p className="item-name">{user.role}</p>
+              <p className="item-name">{user.status}</p>
+              <div className="btn">
+                <button
+                  onClick={() => handleDeleteUser(user._id)}
+                  className="delete-btn"
+                >
+                  DELETE
+                </button>
 
-              <Link to={`/update-user/${user._id}`}>
-                <button className="edit-btn">EDIT</button>
-              </Link>
-
-              <button className="ban-btn">
-                {user.isBanned === false ? "BAN" : "UN-BAN"}
-              </button>
+                <Link to={`/update-user/${user._id}`}>
+                  <button className="edit-btn">EDIT</button>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       {/* Delete Confirmation Modal */}
       <Modal

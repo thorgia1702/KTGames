@@ -17,9 +17,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 8,
     },
-    isBanned: {
-      type: Boolean,
-      default: false,
+    status: {
+      type: String,
+      default: "active",
     },
     avatar: {
       type: String,

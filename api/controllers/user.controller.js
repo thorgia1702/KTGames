@@ -9,10 +9,7 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
-  if (
-    (req.user.id !== req.params.id) &
-    (req.user.id !== "653738b66362ed16d43e137b")
-  ) {
+  if ((req.user.id !== req.params.id) & (req.user.role !== "admin")) {
     return next(
       errorHandler(401, "You do not have permission to update this user!")
     );
@@ -34,6 +31,7 @@ export const updateUser = async (req, res, next) => {
           role: req.body.role,
           ktpoint: req.body.ktpoint,
           trophy: req.body.trophy,
+          status: req.body.status,
         },
       },
       { new: true }
@@ -48,11 +46,11 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== "653738b66362ed16d43e137b")
+  if (req.user.role !== "admin")
     return next(
       errorHandler(401, "You do not have permission to delete this user!")
     );
-  if (req.params.id === "653738b66362ed16d43e137b") {
+  if (req.user.role !== "admin") {
     return next(
       errorHandler(401, "You do not have permission to delete admin!")
     );
