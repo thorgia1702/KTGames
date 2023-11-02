@@ -1,0 +1,10 @@
+.bingo-game-board {
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 30px;
+    width: 500px;
+    height: 500px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}

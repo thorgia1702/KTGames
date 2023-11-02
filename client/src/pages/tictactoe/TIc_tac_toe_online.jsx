@@ -5,7 +5,7 @@ import "./tictactoe.css";
 import { Button, Modal, message } from "antd";
 import { Link } from "react-router-dom";
 import { useSocket } from "../../helpers/socket.io/index";
-import { calculateWinner } from "../../game_logics";
+import { calculateWinner_tictactoe } from "../../game_logics";
 import { useDispatch, useSelector } from "react-redux";
 import {
   updateUserSuccess,
@@ -24,7 +24,7 @@ export default function Tic_tac_toe_online() {
   const [opponentName, setOpponentName] = useState(null);
   const [opponentId, setOpponentId] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
-  const winner = calculateWinner(board);
+  const winner = calculateWinner_tictactoe(board);
   const dispatch = useDispatch();
   const [isConnected, setIsConnected] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState("X");
@@ -52,7 +52,7 @@ export default function Tic_tac_toe_online() {
       // Check for a draw
       if (updatedBoard.every((cell) => cell !== null)) {
         setIsDraw(true);
-      } else if (calculateWinner(updatedBoard)) {
+      } else if (calculateWinner_tictactoe(updatedBoard)) {
         setIsWinnerModalVisible(true);
       } else {
         // Update the current player's turn based on the number of "X" and "O" symbols
@@ -112,7 +112,7 @@ export default function Tic_tac_toe_online() {
     boardCopy[index] = symbol;
     appSocket.emit("move", { roomId, board: boardCopy });
 
-    const winningSymbol = calculateWinner(boardCopy);
+    const winningSymbol = calculateWinner_tictactoe(boardCopy);
 
     if (winningSymbol === "✖" || winningSymbol === "○") {
       const newKtPoints = currentUser.ktpoint + 10;

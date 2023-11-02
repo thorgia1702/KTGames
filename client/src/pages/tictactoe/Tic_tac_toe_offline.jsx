@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "../pages.css";
 import Board from "./Board";
 import "./tictactoe.css";
-import { calculateWinner } from "../../game_logics";
+import { calculateWinner_tictactoe } from "../../game_logics";
 import { Button, Modal, message } from "antd";
 import { Link } from "react-router-dom";
 
@@ -11,7 +11,7 @@ export default function Tic_tac_toe_offline() {
   const [xIsNext, setXIsNext] = useState(true);
   const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
 
-  const winner = calculateWinner(board);
+  const winner = calculateWinner_tictactoe(board);
 
   const handleClick = (index) => {
     const boardCopy = [...board];
@@ -20,7 +20,7 @@ export default function Tic_tac_toe_offline() {
     setBoard(boardCopy);
     setXIsNext(!xIsNext);
 
-    if (calculateWinner(boardCopy)) {
+    if (calculateWinner_tictactoe(boardCopy)) {
       // Show the winner modal when a winner is determined
       setIsWinnerModalVisible(true);
     }
