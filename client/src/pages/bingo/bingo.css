@@ -8,3 +8,18 @@
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(5, 1fr);
 }
+
+.game-cell.marked {
+    background-color: #383232;
+    color: #ffffff;
+}
+
+.game-cell{
+    background-color: #e38d04;
+    color: #000000;
+}
+
+.game-cell:hover{
+    background-color: #87662f;
+    color: #827f7f;
+}
