@@ -4,7 +4,7 @@ import "./tictactoe.css";
 export default function Tic_tac_toe() {
   return (
     <div>
-      <h1>Tic Tac Toe wtf</h1>
+      <h1>Tic Tac Toe</h1>
       <div className="btn-ctn">
         <a href="/tic-tac-toe-offline">
           <button className="navbutton" id="tic-tac-toe">Play Local</button>

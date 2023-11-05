@@ -40,8 +40,10 @@ export default function Tic_tac_toe_online() {
     status: "",
   });
 
+
   const handleConnectPlayers = () => {
-    appSocket.emit("joinRoom", roomId, currentUser._id);
+    // No need to pass roomId, server will create or assign one
+    appSocket.emit("findGame", currentUser._id);
     setIsConnected(true);
   };
 

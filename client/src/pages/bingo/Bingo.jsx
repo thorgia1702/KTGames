@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./bingo.css";
 import { Button, Modal } from "antd";
 import { Link } from "react-router-dom";
@@ -18,33 +18,33 @@ export default function Bingo() {
   const [board, setBoard] = useState(generateRandomBoard());
   const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
   const [markedRows, setMarkedRows] = useState(0);
-  const [isGameActive, setIsGameActive] = useState(true); // New state to track game activity
+  const [isGameActive, setIsGameActive] = useState(true);
 
   const handleMarkCell = (index) => {
     if (!isGameActive) {
       // If the game is not active, ignore clicks
       return;
     }
+    // Toggle the marked state of the clicked cell
     setBoard((prevBoard) =>
-      prevBoard.map((cell, i) => {
-        if (i === index) return { ...cell, marked: !cell.marked };
-        return cell;
-      })
+      prevBoard.map((cell, i) =>
+        i === index ? { ...cell, marked: !cell.marked } : cell
+      )
     );
+  };
 
-    // Update complete lines calculation based on the new board structure
-    const newBoard = [...board];
-    newBoard[index] = { ...newBoard[index], marked: !newBoard[index].marked };
+  useEffect(() => {
+    // Check for complete lines whenever the board changes
     const completeLines = calculateWinner_bingo(
-      newBoard.map((cell) => (cell.marked ? "X" : null))
+      board.map((cell) => (cell.marked ? "X" : null))
     );
     setMarkedRows(completeLines);
 
-    if (completeLines === 5) {
+    if (completeLines >= 5) {
       setIsWinnerModalVisible(true);
       setIsGameActive(false);
     }
-  };
+  }, [board]);
 
   const handleResetGame = () => {
     setBoard(generateRandomBoard()); // Reset with a new random board
@@ -56,7 +56,7 @@ export default function Bingo() {
   return (
     <div>
       <h1>Bingo</h1>
-      <Bingo_board cells={board} onCellClick={handleMarkCell}></Bingo_board>
+      <Bingo_board cells={board} onCellClick={handleMarkCell} />
       <Button onClick={handleResetGame}>Reset Game</Button>
       <Modal
         title="Winner"
@@ -64,7 +64,7 @@ export default function Bingo() {
         onCancel={() => setIsWinnerModalVisible(false)}
         onOk={() => setIsWinnerModalVisible(false)}
       >
-        Congratulations! You have 5 complete lines in Bingo!
+        Congratulations! You have completed at least 5 lines in Bingo!
       </Modal>
       <Link to="/">Back to Home</Link>
     </div>

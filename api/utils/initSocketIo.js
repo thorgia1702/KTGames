@@ -1,6 +1,7 @@
+// Server-side: initSocketIo.js
 import { Server } from "socket.io";
 
-let rooms = new Map(); // Store room data
+let rooms = new Map();
 
 export let io;
 
@@ -10,52 +11,59 @@ export default function initSocketIo(httpServer) {
     transports: ["websocket", "polling"],
   });
 
+  let waitingPlayers = [];
+
   io.on("connection", (socket) => {
-    socket.on("joinRoom", (roomId, playerId) => {
-      socket.join(roomId);
-      socket.roomId = roomId;
-      socket.playerId = playerId;
+    socket.on("findGame", (playerId) => {
+      let roomId;
 
-      if (!rooms.has(roomId)) {
+      if (waitingPlayers.length > 0) {
+        const waitingPlayer = waitingPlayers.shift();
+        roomId = `${waitingPlayer.playerId}_${playerId}_${Date.now()}`;
+        waitingPlayer.socket.join(roomId);
+        socket.join(roomId);
+
         rooms.set(roomId, {
-          players: [socket],
-          currentPlayer: 0, // Index of the current player (0 or 1)
-          board: Array(100).fill(null),
+          players: [waitingPlayer.socket, socket],
+          currentPlayer: 0, // Randomize who starts
         });
-      } else {
-        const room = rooms.get(roomId);
-        room.players.push(socket);
 
-        if (room.players.length === 2) {
-          // Start the game
-          io.to(roomId).emit("startGame", [
-            room.players[0].playerId,
-            room.players[1].playerId,
-          ]);
-        }
+        waitingPlayer.socket.roomId = roomId;
+        waitingPlayer.socket.playerId = waitingPlayer.playerId;
+        socket.roomId = roomId;
+        socket.playerId = playerId;
+
+        // Emit to both players who starts first
+        const startingPlayerId =
+          rooms.get(roomId).players[rooms.get(roomId).currentPlayer].playerId;
+        io.to(roomId).emit("startGame", [waitingPlayer.playerId, playerId]);
+        io.to(roomId).emit("updateTurn", startingPlayerId);
+      } else {
+        waitingPlayers.push({ socket, playerId });
+        socket.emit("waitingForOpponent");
       }
     });
 
     socket.on("move", (data) => {
       const room = rooms.get(socket.roomId);
-      if (socket === room.players[room.currentPlayer]) {
+      if (!room) return;
+
+      if (room.players[room.currentPlayer].id === socket.id) {
         const { board } = data;
         room.board = board;
         io.to(socket.roomId).emit("gameUpdate", board);
 
         // Switch to the other player's turn
         room.currentPlayer = 1 - room.currentPlayer;
+        const nextPlayerId = room.players[room.currentPlayer].playerId;
+        io.to(socket.roomId).emit("updateTurn", nextPlayerId);
       }
     });
 
-    socket.on("newMatch", () => {
-      const room = rooms.get(socket.roomId);
-      room.board = Array(100).fill(null);
-      room.currentPlayer = 0;
-      io.to(socket.roomId).emit("gameUpdate", room.board);
-    });
-
     socket.on("disconnect", () => {
+      waitingPlayers = waitingPlayers.filter(
+        (player) => player.socket !== socket
+      );
       const room = rooms.get(socket.roomId);
       if (room) {
         io.to(socket.roomId).emit("playerDisconnected");

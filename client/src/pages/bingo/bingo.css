@@ -14,12 +14,19 @@
     color: #ffffff;
 }
 
-.game-cell{
+.bingo_game-cell{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 22px;
+    border: 1px solid #ccc;
     background-color: #e38d04;
     color: #000000;
 }
 
-.game-cell:hover{
+.bingo_game-cell:hover{
     background-color: #87662f;
     color: #827f7f;
 }
