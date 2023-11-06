@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../pages.css";
 import Board from "./Board";
 import "./tictactoe.css";
-import { Button, Modal, message } from "antd";
+import { Button, Modal } from "antd";
 import { Link } from "react-router-dom";
 import { useSocket } from "../../helpers/socket.io/index";
 import { calculateWinner_tictactoe } from "../../game_logics";
@@ -21,7 +21,6 @@ export default function Tic_tac_toe_online() {
   const [isWinnerModalVisible, setIsWinnerModalVisible] = useState(false);
   const [isDraw, setIsDraw] = useState(false);
   const [roomId, setRoomId] = useState(null);
-  const [opponentName, setOpponentName] = useState(null);
   const [opponentId, setOpponentId] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const winner = calculateWinner_tictactoe(board);
@@ -40,10 +39,8 @@ export default function Tic_tac_toe_online() {
     status: "",
   });
 
-
   const handleConnectPlayers = () => {
-    // No need to pass roomId, server will create or assign one
-    appSocket.emit("findGame", currentUser._id);
+    appSocket.emit("findGameTicTacToe", currentUser._id);
     setIsConnected(true);
   };
 
@@ -68,24 +65,28 @@ export default function Tic_tac_toe_online() {
       }
     });
 
-    appSocket.on("startGame", async (opponent) => {
-      const opponentId = opponent.find(
+    appSocket.on("startGame", async (data) => {
+      const { roomId, players, gameType } = data;
+      if (gameType !== "tic-tac-toe") return; // Guard clause for game type
+
+      const opponentId = players.find(
         (playerId) => playerId !== currentUser._id
       );
       setOpponentId(opponentId);
       try {
         const res = await fetch(`/api/user/get/${opponentId}`);
-        const data = await res.json();
-        if (data.success === false) {
-          console.log(data.message);
+        const opponentData = await res.json(); // Rename to avoid confusion with 'data'
+        if (opponentData.success === false) {
+          console.log(opponentData.message);
           return;
         }
-        setFormData(data);
+        setFormData(opponentData);
       } catch (error) {
         console.error("Error fetching opponent name:", error);
       }
 
-      const index = opponent.indexOf(currentUser._id);
+      // Here, use 'players.indexOf' instead of 'opponent.indexOf'
+      const index = players.indexOf(currentUser._id);
       setIsPlayerX(index === 0);
     });
 
