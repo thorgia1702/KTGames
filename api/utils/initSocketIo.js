@@ -14,6 +14,7 @@ export default function initSocketIo(httpServer) {
   let waitingPlayersBingo = [];
 
   io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
     function createBingoBoard() {
       // Initialize a 5x5 Bingo board
       let board = Array.from({ length: 25 }, (_, i) => ({
@@ -39,8 +40,11 @@ export default function initSocketIo(httpServer) {
 
         // Initialize the room with the default values for the game
         rooms.set(roomId, {
-          players: [waitingPlayer.socket, socket],
-          currentPlayer: 0, //Math.round(Math.random()), // Randomly select who starts
+          players: [
+            { playerId: waitingPlayer.playerId, socket: waitingPlayer.socket },
+            { playerId, socket },
+          ],
+          currentPlayer: 0,
           gameType: gameType,
           // Specific game states can be added here e.g. board for Tic Tac Toe or bingoBoard for Bingo
         });
@@ -84,7 +88,7 @@ export default function initSocketIo(httpServer) {
         if (gameType === "tic-tac-toe" || gameType === "bingo") {
           const startingPlayerId =
             rooms.get(roomId).players[rooms.get(roomId).currentPlayer].playerId;
-          io.to(roomId).emit("updateTurn", startingPlayerId);
+          io.to(roomId).emit("updateTurn", { nextPlayerId: startingPlayerId });
         }
       } else {
         waitingPlayers.push({ socket, playerId });
@@ -107,27 +111,29 @@ export default function initSocketIo(httpServer) {
       const room = rooms.get(socket.roomId);
       if (!room) return;
 
-      // Tic Tac Toe specific move handling
-      if (room.gameType === "tic-tac-toe") {
-        if (room.players[room.currentPlayer].id === socket.id) {
-          room.board = data.board;
-          io.to(socket.roomId).emit("gameUpdate", room.board);
-          room.currentPlayer = 1 - room.currentPlayer;
-          io.to(socket.roomId).emit(
-            "updateTurn",
-            room.players[room.currentPlayer].playerId
-          );
+      const currentPlayerIndex = room.currentPlayer;
+      const currentPlayerSocket = room.players[currentPlayerIndex].socket;
+
+      // Check if the current player is the one making the move
+      if (currentPlayerSocket.id === socket.id) {
+        // Tic Tac Toe specific move handling
+        if (room.gameType === "tic-tac-toe") {
+          if (room.players[room.currentPlayer].id === socket.id) {
+            room.board = data.board;
+            io.to(socket.roomId).emit("gameUpdate", room.board);
+            room.currentPlayer = 1 - room.currentPlayer;
+            io.to(socket.roomId).emit(
+              "updateTurn",
+              room.players[room.currentPlayer].playerId
+            );
+          }
         }
-      }
 
-      // Bingo specific move handling
-      if (room.gameType === "bingo") {
-        if (room.players[room.currentPlayer].id === socket.id) {
-          // Get the number that was marked
+        // Bingo specific move handling
+        if (room.gameType === "bingo") {
           const numberToMark =
-            room.bingoBoard[room.currentPlayer][data.index].number;
+            room.bingoBoard[currentPlayerIndex][data.index].number;
 
-          // Mark this number on both players' boards
           room.bingoBoard.forEach((board) => {
             const cellToMark = board.find(
               (cell) => cell.number === numberToMark
@@ -137,23 +143,26 @@ export default function initSocketIo(httpServer) {
             }
           });
 
-          // Notify both players with the updated state of their own board
-          room.players.forEach((playerSocket, index) => {
-            io.to(playerSocket.id).emit("gameUpdate", room.bingoBoard[index]);
+          room.players.forEach((player, index) => {
+            if (player.socket.id) {
+              io.to(player.socket.id).emit(
+                "gameUpdate",
+                room.bingoBoard[index]
+              );
+            }
           });
 
-          // Switch to the next player's turn
-          room.currentPlayer = 1 - room.currentPlayer;
-          io.to(socket.roomId).emit(
-            "updateTurn",
-            room.players[room.currentPlayer].playerId
-          );
+          room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
+          io.to(socket.roomId).emit("updateTurn", {
+            nextPlayerId: room.players[room.currentPlayer].playerId,
+          });
         }
       }
     });
 
     // Handle disconnection
     socket.on("disconnect", () => {
+      console.log(`User disconnected: ${socket.id}`);
       // Remove the player from the waiting list if they're still waiting
       waitingPlayersTicTacToe = waitingPlayersTicTacToe.filter(
         (player) => player.socket !== socket

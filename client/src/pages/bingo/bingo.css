@@ -9,12 +9,19 @@
     grid-template-rows: repeat(5, 1fr);
 }
 
-.game-cell.marked {
+.game-cell-marked {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 22px;
+    border: 1px solid #ccc;
     background-color: #383232;
     color: #ffffff;
 }
 
-.bingo_game-cell{
+.bingo_game-cell {
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -26,7 +33,8 @@
     color: #000000;
 }
 
-.bingo_game-cell:hover{
+.bingo_game-cell:hover {
+
     background-color: #87662f;
     color: #827f7f;
 }

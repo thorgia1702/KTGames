@@ -64,9 +64,9 @@ export default function Bingo() {
       }
     });
 
-    appSocket.on("gameUpdate", (updatedBoard) => {
-      setBoard(updatedBoard);
-      //check winner here
+    appSocket.on("gameUpdate", (newBoard) => {
+      console.log("Received new board state: ", newBoard);
+      setBoard(newBoard);
     });
 
     appSocket.on("updateTurn", (data) => {
@@ -92,7 +92,7 @@ export default function Bingo() {
       appSocket.off("updateTurn");
       appSocket.off("playerDisconnected");
     };
-  }, [appSocket, currentUser._id]);
+  }, [appSocket]);
 
   const handleMarkCell = (index) => {
     if (!isGameActive || !isPlayerTurn || !roomId) return;
@@ -100,7 +100,7 @@ export default function Bingo() {
     const cell = board[index];
     if (!cell.marked) {
       appSocket.emit("move", { index, roomId });
-      setIsPlayerTurn(false); // Optimistically assume it's no longer our turn
+      // The server will handle the state and emit an "updateTurn" event.
     }
   };
 
