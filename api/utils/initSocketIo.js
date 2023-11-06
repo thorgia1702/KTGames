@@ -29,6 +29,41 @@ export default function initSocketIo(httpServer) {
       return board;
     }
 
+    function calculateWinner_bingo(cells) {
+      const lines = [
+        [0, 1, 2, 3, 4],
+        [5, 6, 7, 8, 9],
+        [10, 11, 12, 13, 14],
+        [15, 16, 17, 18, 19],
+        [20, 21, 22, 23, 24],
+        [0, 5, 10, 15, 20],
+        [1, 6, 11, 16, 21],
+        [2, 7, 12, 17, 22],
+        [3, 8, 13, 18, 23],
+        [4, 9, 14, 19, 24],
+        [0, 6, 12, 18, 24],
+        [4, 8, 12, 16, 20],
+      ];
+
+      let completeLines = 0;
+
+      for (let i = 0; i < lines.length; i++) {
+        const [a, b, c, d, e] = lines[i];
+        // Check if all cells in a line are marked with "X"
+        if (
+          cells[a] === "X" &&
+          cells[b] === "X" &&
+          cells[c] === "X" &&
+          cells[d] === "X" &&
+          cells[e] === "X"
+        ) {
+          completeLines += 1;
+        }
+      }
+
+      return completeLines; // Returns the count of complete lines
+    }
+
     // General function to join a room for any game type
     function joinRoom(playerId, waitingPlayers, gameType) {
       let roomId;
@@ -131,27 +166,42 @@ export default function initSocketIo(httpServer) {
 
         // Bingo specific move handling
         if (room.gameType === "bingo") {
-          const numberToMark =
-            room.bingoBoard[currentPlayerIndex][data.index].number;
+          // Find the board for the current player
+          const currentBoard = room.bingoBoard[currentPlayerIndex];
 
-          room.bingoBoard.forEach((board) => {
-            const cellToMark = board.find(
-              (cell) => cell.number === numberToMark
+          // Find and mark the number on both boards
+          room.bingoBoard.forEach((playerBoard) => {
+            const cellToMark = playerBoard.find(
+              (cell) => cell.number === currentBoard[data.index].number
             );
             if (cellToMark) {
               cellToMark.marked = true;
             }
           });
 
-          room.players.forEach((player, index) => {
-            if (player.socket.id) {
-              io.to(player.socket.id).emit(
-                "gameUpdate",
-                room.bingoBoard[index]
-              );
+          // Now check each player board for a winner
+          room.bingoBoard.forEach((playerBoard, index) => {
+            // Convert the board into an array of "X" and empty strings for calculateWinner_bingo function
+            const markedBoard = playerBoard.map((cell) =>
+              cell.marked ? "X" : ""
+            );
+            const winnerLines = calculateWinner_bingo(markedBoard);
+
+            if (winnerLines >= 5) {
+              // Notify all clients in the room that this player has won
+              io.to(socket.roomId).emit("gameWon", {
+                winnerId: room.players[index].playerId,
+              });
+              // Perform any other cleanup or state updates as necessary
             }
           });
 
+          // Notify both players with the new board states
+          room.players.forEach((player, index) => {
+            io.to(player.socket.id).emit("gameUpdate", room.bingoBoard[index]);
+          });
+
+          // Update the current player
           room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
           io.to(socket.roomId).emit("updateTurn", {
             nextPlayerId: room.players[room.currentPlayer].playerId,

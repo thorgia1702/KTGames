@@ -18,6 +18,7 @@ export default function Bingo() {
   const { currentUser } = useSelector((state) => state.user);
   const [isConnected, setIsConnected] = useState(false);
   const [isBoardLoaded, setIsBoardLoaded] = useState(false);
+  const [gameOutcome, setGameOutcome] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -64,6 +65,20 @@ export default function Bingo() {
       }
     });
 
+    appSocket.on("gameWon", (data) => {
+      if (data.winnerId === currentUser._id) {
+        // Current user is the winner
+        setGameOutcome("win");
+        // Set some state or text indicating the user has won
+      } else {
+        // Current user is the loser
+        setGameOutcome("lose");
+        // Set some state or text indicating the user has lost
+      }
+      setIsWinnerModalVisible(true);
+      setIsGameActive(false); // End the game
+    });
+
     appSocket.on("gameUpdate", (newBoard) => {
       console.log("Received new board state: ", newBoard);
       setBoard(newBoard);
@@ -91,8 +106,9 @@ export default function Bingo() {
       appSocket.off("gameUpdate");
       appSocket.off("updateTurn");
       appSocket.off("playerDisconnected");
+      appSocket.off("gameWon");
     };
-  }, [appSocket]);
+  }, [appSocket, currentUser._id]);
 
   const handleMarkCell = (index) => {
     if (!isGameActive || !isPlayerTurn || !roomId) return;
@@ -134,7 +150,7 @@ export default function Bingo() {
       )}
 
       <Modal
-        title="Winner"
+        title={gameOutcome === "win" ? "Winner" : "Game Over"}
         open={isWinnerModalVisible}
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[
@@ -147,7 +163,11 @@ export default function Bingo() {
           </Button>,
         ]}
       >
-        <p>Congratulations! You have won the Bingo game!</p>
+        {gameOutcome === "win" ? (
+          <p>Congratulations! You have won the Bingo game!</p>
+        ) : (
+          <p>Sorry! You have lost the Bingo game.</p>
+        )}
       </Modal>
     </div>
   );
