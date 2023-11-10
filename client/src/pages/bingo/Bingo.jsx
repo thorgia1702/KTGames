@@ -111,7 +111,6 @@ export default function Bingo() {
     });
 
     appSocket.on("gameUpdate", (newBoard) => {
-      console.log("Received new board state: ", newBoard);
       setBoard(newBoard);
     });
 
