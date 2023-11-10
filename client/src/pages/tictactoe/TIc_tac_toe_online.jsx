@@ -15,6 +15,7 @@ import {
 import Searching from "../../images/loop2.gif";
 
 export default function Tic_tac_toe_online() {
+  const [isGameOver, setIsGameOver] = useState(false);
   const { appSocket } = useSocket();
   const [board, setBoard] = useState(Array(100).fill(null));
   const [isPlayerX, setIsPlayerX] = useState(false);
@@ -45,14 +46,17 @@ export default function Tic_tac_toe_online() {
   };
 
   useEffect(() => {
+    setIsGameOver(false);
     appSocket.on("gameUpdate", (updatedBoard) => {
       setBoard(updatedBoard);
 
       // Check for a draw
       if (updatedBoard.every((cell) => cell !== null)) {
         setIsDraw(true);
+        setIsGameOver(true);
       } else if (calculateWinner_tictactoe(updatedBoard)) {
         setIsWinnerModalVisible(true);
+        setIsGameOver(true);
       } else {
         // Update the current player's turn based on the number of "X" and "O" symbols
         const xCount = updatedBoard.filter((cell) => cell === "✖").length;
@@ -91,23 +95,45 @@ export default function Tic_tac_toe_online() {
     });
 
     appSocket.on("playerDisconnected", () => {
+      if (!isGameOver) {
+        Modal.info({
+          title: "Player Disconnected",
+          centered: true,
+          content: "Your opponent has disconnected. The game will end now.",
+        });
+      }
       setIsConnected(false);
       setOpponentId(null);
       setBoard(Array(100).fill(null));
       setIsWinnerModalVisible(false);
       setIsPlayerX(false);
       setCurrentPlayer("X");
+      setIsGameOver(true);
     });
 
     return () => {
       appSocket.off("gameUpdate");
       appSocket.off("startGame");
+      appSocket.off("playerDisconnected");
     };
-  }, [appSocket, currentUser]);
+  }, [appSocket, currentUser, isGameOver]);
+
+  useEffect(() => {
+    if (winner || isDraw) {
+      setIsGameOver(true);
+    }
+  }, [winner, isDraw]);
 
   const handleClick = (index) => {
     const boardCopy = [...board];
     if (winner || !isConnected || boardCopy[index]) {
+      return;
+    }
+
+    const isCurrentPlayerTurn =
+      (isPlayerX && currentPlayer === "X") ||
+      (!isPlayerX && currentPlayer === "○");
+    if (!isConnected || !isCurrentPlayerTurn) {
       return;
     }
 

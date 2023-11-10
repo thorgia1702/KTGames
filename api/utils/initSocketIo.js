@@ -153,14 +153,15 @@ export default function initSocketIo(httpServer) {
       if (currentPlayerSocket.id === socket.id) {
         // Tic Tac Toe specific move handling
         if (room.gameType === "tic-tac-toe") {
-          if (room.players[room.currentPlayer].id === socket.id) {
+          // Check if the current player is the one making the move
+          if (room.players[currentPlayerIndex].playerId === socket.playerId) {
             room.board = data.board;
             io.to(socket.roomId).emit("gameUpdate", room.board);
-            room.currentPlayer = 1 - room.currentPlayer;
-            io.to(socket.roomId).emit(
-              "updateTurn",
-              room.players[room.currentPlayer].playerId
-            );
+            // Toggle the currentPlayer to the next player
+            room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
+            io.to(socket.roomId).emit("updateTurn", {
+              nextPlayerId: room.players[room.currentPlayer].playerId,
+            });
           }
         }
 

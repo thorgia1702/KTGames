@@ -3,11 +3,17 @@ import "./bingo.css";
 import { Button, Modal } from "antd";
 import BingoBoard from "./Bingo_board";
 import { calculateWinner_bingo } from "../../game_logics";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Searching from "../../images/loop2.gif";
 import { useSocket } from "../../helpers/socket.io/index";
+import {
+  updateUserSuccess,
+  updateUserFailure,
+  updateUserStart,
+} from "../../redux/user/userSlice";
 
 export default function Bingo() {
+  const dispatch = useDispatch();
   const [roomId, setRoomId] = useState(null);
   const { appSocket } = useSocket();
   const [board, setBoard] = useState([]);
@@ -16,7 +22,7 @@ export default function Bingo() {
   const [isPlayerTurn, setIsPlayerTurn] = useState(false);
   const [opponentId, setOpponentId] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
-  const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [isBoardLoaded, setIsBoardLoaded] = useState(false);
   const [gameOutcome, setGameOutcome] = useState(null);
   const [formData, setFormData] = useState({
@@ -33,7 +39,8 @@ export default function Bingo() {
 
   const handleConnectPlayers = () => {
     appSocket.emit("findGameBingo", currentUser._id);
-    setIsConnected(true);
+    setIsConnecting(true);
+    setIsBoardLoaded(false);
   };
 
   useEffect(() => {
@@ -52,6 +59,10 @@ export default function Bingo() {
       );
       setOpponentId(opponentPlayerId);
 
+      if (opponentPlayerId) {
+        setIsConnecting(false);
+      }
+
       try {
         const res = await fetch(`/api/user/get/${opponentPlayerId}`);
         const opponentData = await res.json();
@@ -65,15 +76,35 @@ export default function Bingo() {
       }
     });
 
-    appSocket.on("gameWon", (data) => {
+    appSocket.on("gameWon", async (data) => {
       if (data.winnerId === currentUser._id) {
-        // Current user is the winner
         setGameOutcome("win");
-        // Set some state or text indicating the user has won
+        const newKtPoints = currentUser.ktpoint + 10;
+        const newTrophies = currentUser.trophy + 1;
+        fetch(`/api/user/update/${currentUser._id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ktpoint: newKtPoints,
+            trophy: newTrophies,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success === false) {
+              dispatch(updateUserFailure(data.message));
+            } else {
+              dispatch(updateUserSuccess(data));
+              setIsWinnerModalVisible(true);
+            }
+          })
+          .catch((error) => {
+            dispatch(updateUserFailure(error.message));
+          });
       } else {
-        // Current user is the loser
         setGameOutcome("lose");
-        // Set some state or text indicating the user has lost
       }
       setIsWinnerModalVisible(true);
       setIsGameActive(false); // End the game
@@ -92,9 +123,10 @@ export default function Bingo() {
       setIsGameActive(false);
       Modal.info({
         title: "Player Disconnected",
+        centered: true,
         content: "Your opponent has disconnected. The game will end now.",
         onOk() {
-          setIsConnected(false);
+          setIsConnecting(false);
           setOpponentId(null);
         },
       });
@@ -123,30 +155,34 @@ export default function Bingo() {
   return (
     <div>
       <h1>Bingo</h1>
-      {isConnected && isBoardLoaded ? (
-        opponentId ? (
-          <div className="game-info-container">
-            <p className="game-info">Your opponent: {formData.username}</p>
-            <p className="game-info">
-              Who's Turn: {isPlayerTurn ? "Your turn" : "Opponent's turn"}
-            </p>
-            <BingoBoard cells={board} onCellClick={handleMarkCell} />
-          </div>
-        ) : (
-          <div className="waiting-container">
-            <p className="waiting">Waiting for opponent...</p>
-            <img
-              src={Searching}
-              alt="Searching for opponent"
-              height={300}
-              width={300}
-            />
-          </div>
-        )
+
+      {isConnecting ? (
+        <div className="waiting-container">
+          <p className="waiting">Waiting for opponent...</p>
+          <img
+            src={Searching}
+            alt="Searching for opponent"
+            height={300}
+            width={300}
+          />
+        </div>
+      ) : opponentId && isBoardLoaded ? (
+        <div className="game-info-container">
+          <p className="game-info">Your opponent: {formData.username}</p>
+          <p className="game-info">
+            Who's Turn: {isPlayerTurn ? "Your turn" : "Opponent's turn"}
+          </p>
+          <BingoBoard cells={board} onCellClick={handleMarkCell} />
+        </div>
       ) : (
-        <Button onClick={handleConnectPlayers} disabled={isConnected}>
+        <button
+          className="navbutton"
+          id="tic-tac-toe-online"
+          onClick={handleConnectPlayers}
+          disabled={isConnecting}
+        >
           Connect Players
-        </Button>
+        </button>
       )}
 
       <Modal
