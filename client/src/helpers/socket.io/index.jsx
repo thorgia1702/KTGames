@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect } from 'react'
 import { io } from 'socket.io-client'
 
-const socket = io('localhost:3000', {
+// const socket = io('localhost:3000', {
+//   transports: ['websocket', 'polling'],
+// })
+const socket = io('https://ktgames.onrender.com/', {
   transports: ['websocket', 'polling'],
 })
 
