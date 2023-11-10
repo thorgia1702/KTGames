@@ -14,7 +14,6 @@ export default function initSocketIo(httpServer) {
   let waitingPlayersBingo = [];
 
   io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
     function createBingoBoard() {
       // Initialize a 5x5 Bingo board
       let board = Array.from({ length: 25 }, (_, i) => ({
@@ -213,7 +212,6 @@ export default function initSocketIo(httpServer) {
 
     // Handle disconnection
     socket.on("disconnect", () => {
-      console.log(`User disconnected: ${socket.id}`);
       // Remove the player from the waiting list if they're still waiting
       waitingPlayersTicTacToe = waitingPlayersTicTacToe.filter(
         (player) => player.socket !== socket
