@@ -41,13 +41,13 @@ export default function App() {
             element={<Tic_tac_toe_offline />}
           />
           <Route path="/ktshop" element={<Ktshop />} />
-          <Route path="/bingo" element={<Bingo />} />
 
           <Route element={<PrivateRoute />}>
             <Route
               path="/tic-tac-toe-online"
               element={<Tic_tac_toe_online />}
             />
+            <Route path="/bingo" element={<Bingo />} />
             <Route path="/view-item/:itemId" element={<Item_information />} />
             <Route path="/profile" element={<Profile />} />
           </Route>

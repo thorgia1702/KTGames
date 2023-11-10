@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./pages.css";
-import { notification, Space } from "antd"; // Remove "Alert" from imports
+import { notification, Space } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import Oauth from "../components/Oauth";
 
