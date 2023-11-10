@@ -6,6 +6,7 @@ import { calculateWinner_bingo } from "../../game_logics";
 import { useDispatch, useSelector } from "react-redux";
 import Searching from "../../images/loop2.gif";
 import { useSocket } from "../../helpers/socket.io/index";
+import { Link } from "react-router-dom";
 import {
   updateUserSuccess,
   updateUserFailure,
@@ -25,6 +26,7 @@ export default function Bingo() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isBoardLoaded, setIsBoardLoaded] = useState(false);
   const [gameOutcome, setGameOutcome] = useState(null);
+  const [isGameDraw, setIsGameDraw] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -74,6 +76,12 @@ export default function Bingo() {
       } catch (error) {
         console.error("Error fetching opponent name:", error);
       }
+    });
+
+    appSocket.on("gameDraw", () => {
+      setIsGameDraw(true);
+      setIsWinnerModalVisible(true);
+      setIsGameActive(false); // End the game
     });
 
     appSocket.on("gameWon", async (data) => {
@@ -138,6 +146,7 @@ export default function Bingo() {
       appSocket.off("updateTurn");
       appSocket.off("playerDisconnected");
       appSocket.off("gameWon");
+      appSocket.off("gameDraw")
     };
   }, [appSocket, currentUser._id]);
 
@@ -156,7 +165,7 @@ export default function Bingo() {
       <h1>Bingo</h1>
 
       {isConnecting ? (
-        <div className="waiting-container">
+        <div className="waiting-ctn">
           <p className="waiting">Waiting for opponent...</p>
           <img
             src={Searching}
@@ -185,24 +194,30 @@ export default function Bingo() {
       )}
 
       <Modal
-        title={gameOutcome === "win" ? "Winner" : "Game Over"}
+        title={
+          isGameDraw
+            ? "Game Draw"
+            : gameOutcome === "win"
+            ? "Winner"
+            : "Game Over"
+        }
         open={isWinnerModalVisible}
         onCancel={() => setIsWinnerModalVisible(false)}
-        footer={[
-          <Button
-            key="close"
-            type="primary"
-            onClick={() => setIsWinnerModalVisible(false)}
-          >
-            Close
-          </Button>,
-        ]}
+        footer={[]}
       >
-        {gameOutcome === "win" ? (
+        {isGameDraw ? (
+          <p>The game ended in a draw!</p>
+        ) : gameOutcome === "win" ? (
           <p>Congratulations! You have won the Bingo game!</p>
         ) : (
           <p>Sorry! You have lost the Bingo game.</p>
         )}
+        <Link to={"/bingo"}>
+          <Button>New match</Button>
+        </Link>
+        <Link to={"/"}>
+          <Button>Home</Button>
+        </Link>
       </Modal>
     </div>
   );

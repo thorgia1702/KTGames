@@ -42,8 +42,12 @@
 }
 
 .reset-button {
-    margin-left: 380px;
+    margin-top: 200px;
     background-color: black;
+    margin-left: 50px;
+    height: 80px;
+    width: 250px;
+    font-size: 24px;
 }
 
 .navbutton#tic-tac-toe {
@@ -119,4 +123,9 @@
     height: 70px;
     background-color: #000000;
     font-size: 24px;
+}
+
+.ctn{
+    display: grid;
+    grid-template-columns: repeat(3 , 1fr);
 }

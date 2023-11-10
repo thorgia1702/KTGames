@@ -34,12 +34,17 @@ export default function Tic_tac_toe_offline() {
   return (
     <div>
       <h1>Tic Tac Toe</h1>
-      <div className="game-container"></div>
-      <Board cells={board} onClick={handleClick}></Board>
-      <button className="reset-button" onClick={handleResetGame}>
-        RESET GAME
-      </button>
-
+      <div className="ctn">
+        <div></div>
+        <div className="game-container">
+        <Board cells={board} onClick={handleClick}></Board>
+        </div>
+        <div>
+          <button className="reset-button" onClick={handleResetGame}>
+            RESET GAME
+          </button>
+        </div>
+      </div>
       <Modal
         title="Winner"
         centered
