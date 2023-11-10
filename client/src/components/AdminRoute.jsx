@@ -5,7 +5,7 @@ import { notification } from "antd";
 
 export default function AdminRoute() {
   const { currentUser } = useSelector((state) => state.user);
-  if (!currentUser && currentUser.role === "admin") {
+  if (!currentUser || currentUser.role !== "admin") {
     notification.error({
       message: "Error",
       description: "Unauthorized",
