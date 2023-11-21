@@ -26,7 +26,6 @@ export default function Bingo() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isBoardLoaded, setIsBoardLoaded] = useState(false);
   const [gameOutcome, setGameOutcome] = useState(null);
-  const [isGameDraw, setIsGameDraw] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -78,12 +77,6 @@ export default function Bingo() {
       }
     });
 
-    appSocket.on("gameDraw", () => {
-      setIsGameDraw(true);
-      setIsWinnerModalVisible(true);
-      setIsGameActive(false); // End the game
-    });
-
     appSocket.on("gameWon", async (data) => {
       if (data.winnerId === currentUser._id) {
         setGameOutcome("win");
@@ -115,7 +108,7 @@ export default function Bingo() {
         setGameOutcome("lose");
       }
       setIsWinnerModalVisible(true);
-      setIsGameActive(false); // End the game
+      setIsGameActive(false);
     });
 
     appSocket.on("gameUpdate", (newBoard) => {
@@ -146,7 +139,6 @@ export default function Bingo() {
       appSocket.off("updateTurn");
       appSocket.off("playerDisconnected");
       appSocket.off("gameWon");
-      appSocket.off("gameDraw")
     };
   }, [appSocket, currentUser._id]);
 
@@ -194,20 +186,12 @@ export default function Bingo() {
       )}
 
       <Modal
-        title={
-          isGameDraw
-            ? "Game Draw"
-            : gameOutcome === "win"
-            ? "Winner"
-            : "Game Over"
-        }
+        title={gameOutcome === "win" ? "Winner" : "Game Over"}
         open={isWinnerModalVisible}
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[]}
       >
-        {isGameDraw ? (
-          <p>The game ended in a draw!</p>
-        ) : gameOutcome === "win" ? (
+        {gameOutcome === "win" ? (
           <p>Congratulations! You have won the Bingo game!</p>
         ) : (
           <p>Sorry! You have lost the Bingo game.</p>

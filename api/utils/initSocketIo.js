@@ -14,6 +14,7 @@ export default function initSocketIo(httpServer) {
   let waitingPlayersBingo = [];
 
   io.on("connection", (socket) => {
+    console.log(`User connected: ${socket.id}`);
     function createBingoBoard() {
       // Initialize a 5x5 Bingo board
       let board = Array.from({ length: 25 }, (_, i) => ({
@@ -169,7 +170,7 @@ export default function initSocketIo(httpServer) {
           // Find the board for the current player
           const currentBoard = room.bingoBoard[currentPlayerIndex];
 
-          // Mark the number on both boards
+          // Find and mark the number on both boards
           room.bingoBoard.forEach((playerBoard) => {
             const cellToMark = playerBoard.find(
               (cell) => cell.number === currentBoard[data.index].number
@@ -179,63 +180,40 @@ export default function initSocketIo(httpServer) {
             }
           });
 
-          // Initialize variables to check for draw and winner
-          let draw = false;
-          let winnerId = null;
-          let drawPlayers = [];
-
-          // Check each player board for a winner or a draw
+          // Now check each player board for a winner
           room.bingoBoard.forEach((playerBoard, index) => {
+            // Convert the board into an array of "X" and empty strings for calculateWinner_bingo function
             const markedBoard = playerBoard.map((cell) =>
               cell.marked ? "X" : ""
             );
             const winnerLines = calculateWinner_bingo(markedBoard);
 
             if (winnerLines >= 5) {
-              if (winnerId) {
-                // If there's already a winner and another player also wins, it's a draw
-                draw = true;
-                drawPlayers.push(room.players[index].playerId);
-              } else {
-                winnerId = room.players[index].playerId;
-                drawPlayers.push(winnerId);
-              }
+              // Notify all clients in the room that this player has won
+              io.to(socket.roomId).emit("gameWon", {
+                winnerId: room.players[index].playerId,
+              });
+              // Perform any other cleanup or state updates as necessary
             }
           });
 
-          if (draw) {
-            // Notify all clients in the room that the game is a draw
-            io.to(socket.roomId).emit("gameDraw", {
-              players: drawPlayers,
-            });
-            // Optionally, perform any other cleanup or state updates as necessary
-          } else if (winnerId) {
-            // Notify all clients in the room that there is a winner
-            io.to(socket.roomId).emit("gameWon", {
-              winnerId: winnerId,
-            });
-            // Optionally, perform any other cleanup or state updates as necessary
-          } else {
-            // Notify both players with the new board states
-            room.players.forEach((player, index) => {
-              io.to(player.socket.id).emit(
-                "gameUpdate",
-                room.bingoBoard[index]
-              );
-            });
+          // Notify both players with the new board states
+          room.players.forEach((player, index) => {
+            io.to(player.socket.id).emit("gameUpdate", room.bingoBoard[index]);
+          });
 
-            // Update the current player
-            room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
-            io.to(socket.roomId).emit("updateTurn", {
-              nextPlayerId: room.players[room.currentPlayer].playerId,
-            });
-          }
+          // Update the current player
+          room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
+          io.to(socket.roomId).emit("updateTurn", {
+            nextPlayerId: room.players[room.currentPlayer].playerId,
+          });
         }
       }
     });
 
     // Handle disconnection
     socket.on("disconnect", () => {
+      console.log(`User disconnected: ${socket.id}`);
       // Remove the player from the waiting list if they're still waiting
       waitingPlayersTicTacToe = waitingPlayersTicTacToe.filter(
         (player) => player.socket !== socket
