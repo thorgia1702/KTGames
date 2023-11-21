@@ -180,7 +180,12 @@ export default function initSocketIo(httpServer) {
             }
           });
 
-          // Now check each player board for a winner
+          // Notify both players with the updated board states before checking for a winner
+          room.players.forEach((player, index) => {
+            io.to(player.socket.id).emit("gameUpdate", room.bingoBoard[index]);
+          });
+
+          // Check each player board for a winner after updating the boards
           room.bingoBoard.forEach((playerBoard, index) => {
             // Convert the board into an array of "X" and empty strings for calculateWinner_bingo function
             const markedBoard = playerBoard.map((cell) =>
@@ -195,11 +200,6 @@ export default function initSocketIo(httpServer) {
               });
               // Perform any other cleanup or state updates as necessary
             }
-          });
-
-          // Notify both players with the new board states
-          room.players.forEach((player, index) => {
-            io.to(player.socket.id).emit("gameUpdate", room.bingoBoard[index]);
           });
 
           // Update the current player
