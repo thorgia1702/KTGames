@@ -151,6 +151,9 @@ export default function Bingo() {
       // The server will handle the state and emit an "updateTurn" event.
     }
   };
+  const handleNewMatchClick = () => {
+    window.location.reload();
+  };
 
   return (
     <div>
@@ -197,7 +200,7 @@ export default function Bingo() {
           <p>Sorry! You have lost the Bingo game.</p>
         )}
         <Link to={"/bingo"}>
-          <Button>New match</Button>
+          <Button onClick={handleNewMatchClick}>New match</Button>
         </Link>
         <Link to={"/"}>
           <Button>Home</Button>

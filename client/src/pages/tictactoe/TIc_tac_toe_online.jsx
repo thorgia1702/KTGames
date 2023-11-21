@@ -172,6 +172,10 @@ export default function Tic_tac_toe_online() {
     }
   };
 
+  const handleNewMatchClick = () => {
+    window.location.reload();
+  };
+
   return (
     <div>
       <h1>Tic Tac Toe Online</h1>
@@ -223,9 +227,7 @@ export default function Tic_tac_toe_online() {
         footer={[]}
       >
         {isDraw ? <p>It's a draw!</p> : <p>Winner is {winner}</p>}
-        <Link to={"/tic-tac-toe"}>
-          <Button>New match</Button>
-        </Link>
+        <Button onClick={handleNewMatchClick}>New match</Button>
         <Link to={"/"}>
           <Button>Home</Button>
         </Link>
