@@ -60,7 +60,7 @@ export default function Header() {
       {/* Logo */}
       {currentUser && currentUser.role === "admin" ? (
         <div className="logo-container">
-          <Link to="/admin">
+          <Link to="/">
             <img
               className="logo"
               src={Logo}
@@ -92,7 +92,7 @@ export default function Header() {
         </div>
         {currentUser && currentUser.role === "admin" ? (
           <div className="mini-logo-container">
-            <a href="/admin">
+            <a href="/">
               <img
                 className="logo"
                 src={Logo}
@@ -118,7 +118,7 @@ export default function Header() {
         {currentUser && currentUser.role === "admin" ? (
           <ul className="sidenav">
             <li>
-              <a href="/admin">
+              <a href="/">
                 <button className="navbutton">Home</button>
               </a>
             </li>

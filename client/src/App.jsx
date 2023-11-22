@@ -15,7 +15,6 @@ import Tic_tac_toe_offline from "./pages/tictactoe/Tic_tac_toe_offline";
 import Tic_tac_toe_online from "./pages/tictactoe/TIc_tac_toe_online";
 import Tic_tac_toe from "./pages/tictactoe/Tic_tac_toe";
 import Bingo from "./pages/bingo/Bingo";
-import Admin from "./pages/admin/Admin";
 import Manage_items from "./pages/admin/Manage_items";
 import Manage_users from "./pages/admin/Manage_users";
 import Update_item from "./pages/admin/Update_item";
@@ -53,7 +52,6 @@ export default function App() {
           </Route>
 
           <Route element={<AdminRoute />}>
-            <Route path="/admin" element={<Admin />} />
             <Route path="/users" element={<Manage_users />} />
             <Route path="/items" element={<Manage_items />} />
             <Route path="/update-item/:itemId" element={<Update_item />} />
