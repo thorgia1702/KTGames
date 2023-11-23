@@ -89,14 +89,21 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password && formData.password.length < 8) {
-      notification.error({
-        message: "Error",
-        description: "Password must be at least 8 characters long",
-      });
-      return;
+    let payload = { ...formData };
+    // Check if password change is intended
+    if (showPassword) {
+      if (formData.password && formData.password.length < 8) {
+        notification.error({
+          message: "Error",
+          description: "Password must be at least 8 characters long",
+        });
+        return;
+      }
+    } else {
+      // Remove password from payload if not changing
+      delete payload.password;
     }
-    if (!/^\d{10}$/.test(formData.phone)) {
+    if (!/^\d{10}$/.test(payload.phone)) {
       notification.error({
         message: "Error",
         description: "Phone number must be a 10-digit number",
@@ -108,7 +115,7 @@ export default function Profile() {
       const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success === false) {
@@ -242,7 +249,7 @@ export default function Profile() {
                 id="password"
                 placeholder="Enter New Password"
                 onChange={handleChange}
-                disabled={!showPassword} // Disable the password input based on showPassword state
+                disabled={!showPassword}
               ></input>
 
               <div className="checkbox-container">

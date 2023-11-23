@@ -10,8 +10,6 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../../firebase";
-import { Link } from "react-router-dom";
-import { CloseSquareFilled } from "@ant-design/icons";
 
 export default function Update_item() {
   const navigate = useNavigate();

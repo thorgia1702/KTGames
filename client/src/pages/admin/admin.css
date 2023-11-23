@@ -88,36 +88,37 @@ textarea {
 
 
 
-.delete-btn{
+.delete-btn {
     margin-top: 15px;
     background-color: rgb(214, 40, 40);
     width: 100px;
     margin-bottom: 15px;
 }
 
-.edit-btn{
+.edit-btn {
     background-color: rgb(20, 152, 20);
     width: 100px;
     margin-bottom: 15px;
 }
 
-.btn{
+.btn {
     display: flex;
     flex-direction: column;
 }
- .list-of-users{
+
+.list-of-users {
     width: 1500px;
     margin-left: auto;
     margin-right: auto;
- }
+}
 
- .list-of-items{
+.list-of-items {
     width: 1000px;
     margin-left: auto;
     margin-right: auto;
- }
+}
 
- .column-header {
+.column-header {
     display: flex;
     justify-content: space-between;
     padding: 12px;
@@ -142,10 +143,113 @@ textarea {
     width: 250px;
 }
 
-.showModal-btn{
+.showModal-btn {
     margin-left: 700px;
     width: 300px;
     height: 70px;
     background-color: black;
     font-size: 25px;
+}
+
+.list-of-orders {
+    width: 100%;
+    margin: 0 auto;
+    overflow-x: auto;
+    /* For responsive scrolling on smaller screens */
+}
+
+.list-of-orders table {
+    width: 100%;
+    border-collapse: collapse;
+    /* Ensures that table borders are collapsed into a single border */
+    table-layout: fixed;
+    /* Optional: Helps with equal width distribution */
+}
+
+.list-of-orders th,
+.list-of-orders td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    font-size: 18px;
+}
+
+.list-of-orders td#order_pending {
+    text-align: center;
+    font-size: 28px;
+    color: rgb(255, 0, 0);
+}
+
+.list-of-orders td#order_approved {
+    text-align: center;
+    font-size: 28px;
+    color: rgb(47, 255, 0);
+}
+
+.list-of-orders td#order_rejected {
+    text-align: center;
+    font-size: 28px;
+    color: rgb(0, 98, 255);
+}
+
+.list-of-orders thead th {
+    font-weight: bold;
+    font-size: 30px;
+}
+
+
+/* Button styles */
+.list-of-orders .delete-btn,
+.list-of-orders .edit-btn {
+    padding: 5px 10px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 15px;
+    height: 40px;
+}
+
+.list-of-orders .delete-btn {
+    background-color: rgb(214, 40, 40);
+    color: white;
+}
+
+.list-of-orders .edit-btn {
+    background-color: rgb(20, 152, 20);
+    color: white;
+}
+
+/* Responsive design: Adjusts table layout for smaller screens */
+@media screen and (max-width: 600px) {
+
+    .list-of-orders table,
+    .list-of-orders thead,
+    .list-of-orders tbody,
+    .list-of-orders th,
+    .list-of-orders td,
+    .list-of-orders tr {
+        display: block;
+    }
+
+    .list-of-orders th,
+    .list-of-orders td {
+        text-align: right;
+        padding-left: 50%;
+    }
+
+    .list-of-orders th {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+    }
+
+    .list-of-orders tr {
+        margin-bottom: 10px;
+    }
 }

@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://scontent.fhan20-1.fna.fbcdn.net/v/t1.15752-9/250510336_616776576166119_4735492534877987506_n.png?_nc_cat=100&ccb=1-7&_nc_sid=8cd0a2&_nc_ohc=MbVR_IVKxXEAX8Smse2&_nc_ht=scontent.fhan20-1.fna&oh=03_AdQl9RSdg4IFbBMpGt5IQxQbdcfDrmqYj8Ao86O9oSYy6w&oe=654E3679",
+        "https://firebasestorage.googleapis.com/v0/b/ktgames-29a1d.appspot.com/o/1700723783045DALL%C2%B7E%202023-11-23%2014.15.55%20-%20Design%20an%20avatar%20for%20a%20gaming%20company%20named%20KTGAMES%2C%20incorporating%20elements%20that%20reflect%20video%20gaming%20culture.%20The%20avatar%20should%20be%20vibrant%2C%20inviting%2C.pngp3zyot0b?alt=media&token=1af5871d-496d-46f8-bdcd-c4ea94e88398",
     },
     trophy: {
       type: Number,

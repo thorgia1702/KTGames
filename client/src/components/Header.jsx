@@ -124,12 +124,27 @@ export default function Header() {
             </li>
             <li>
               <a href="/users">
-                <button className="navbutton">Manage accounts</button>
+                <button className="navbutton">Manage users</button>
               </a>
             </li>
             <li>
               <a href="/items">
-                <button className="navbutton">Manage shop</button>
+                <button className="navbutton">Manage items</button>
+              </a>
+            </li>
+            <li>
+              <a href="/orders">
+                <button className="navbutton">Manage orders</button>
+              </a>
+            </li>
+            <li>
+              <a href="/leaderboard">
+                <button className="navbutton">Leaderboard</button>
+              </a>
+            </li>
+            <li>
+              <a href="/ktshop">
+                <button className="navbutton">KT Shop</button>
               </a>
             </li>
           </ul>
