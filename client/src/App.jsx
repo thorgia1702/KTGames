@@ -15,12 +15,14 @@ import Tic_tac_toe_offline from "./pages/tictactoe/Tic_tac_toe_offline";
 import Tic_tac_toe_online from "./pages/tictactoe/TIc_tac_toe_online";
 import Tic_tac_toe from "./pages/tictactoe/Tic_tac_toe";
 import Bingo from "./pages/bingo/Bingo";
+import Manage_orders from "./pages/admin/Manage_orders";
 import Manage_items from "./pages/admin/Manage_items";
 import Manage_users from "./pages/admin/Manage_users";
 import Update_item from "./pages/admin/Update_item";
 import Update_user from "./pages/admin/Update_user";
 import Item_information from "./pages/Item_information";
 import ScrollToTop from "./Scroll_To_Top";
+import Update_order from "./pages/admin/Update_order";
 
 export default function App() {
   return (
@@ -54,8 +56,10 @@ export default function App() {
           <Route element={<AdminRoute />}>
             <Route path="/users" element={<Manage_users />} />
             <Route path="/items" element={<Manage_items />} />
+            <Route path="/orders" element={<Manage_orders />} />
             <Route path="/update-item/:itemId" element={<Update_item />} />
             <Route path="/update-user/:userId" element={<Update_user />} />
+            <Route path="/update-order/:orderId" element={<Update_order />} />
           </Route>
         </Routes>
       </div>

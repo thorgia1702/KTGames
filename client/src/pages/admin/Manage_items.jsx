@@ -234,7 +234,7 @@ export default function Profile() {
 
   return (
     <div className="list-of-items">
-      <h1>Manage item</h1>
+      <h1>Manage items</h1>
 
       <div className="add-item">
         <button className="showModal-btn" onClick={showModal}>

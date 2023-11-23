@@ -13,6 +13,7 @@ import Cs2 from "../images/cs2.png";
 import { useDispatch, useSelector } from "react-redux";
 import Usermanage from "../images/user-manage.png";
 import Itemmanage from "../images/item-manage.png";
+import Ordermanage from "../images/order-manage.png";
 import { Button, Modal, notification } from "antd";
 import {
   signOutFailure,
@@ -135,7 +136,7 @@ export default function Home() {
                 height={300}
                 width={300}
               />
-              <p>Manage user</p>
+              <p>Manage users</p>
             </a>
           </div>
           <div>
@@ -147,7 +148,19 @@ export default function Home() {
                 height={300}
                 width={300}
               />
-              <p>Manage item</p>
+              <p>Manage items</p>
+            </a>
+          </div>
+          <div>
+            <a href="/orders">
+              <img
+                className="game"
+                src={Ordermanage}
+                alt="order-manage"
+                height={300}
+                width={300}
+              />
+              <p>Manage orders</p>
             </a>
           </div>
         </div>
