@@ -470,5 +470,12 @@ hr {
 .order-btn{
   width: 400px;
   height: 50px;
+  margin-left: 70px;
+}
+
+.order_button{
+  margin-top: 50px;
+  width: 400px;
+  height: 50px;
   margin-left: 100px;
 }

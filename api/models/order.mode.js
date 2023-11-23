@@ -2,7 +2,12 @@ import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
-    name: {
+    userId: {
+      type: String,
+      require: true,
+      unique: false,
+    },
+    userName: {
       type: String,
       require: true,
       unique: false,
@@ -31,6 +36,11 @@ const orderSchema = new mongoose.Schema(
       require: true,
       unique: false,
     },
+    productId: {
+      type: String,
+      require: true,
+      unique: false,
+    },
     productName: {
       type: String,
       require: true,
@@ -43,7 +53,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      default: "user",
+      default: "Pending",
       unique: false,
     },
   },
