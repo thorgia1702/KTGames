@@ -97,37 +97,39 @@ export default function Manage_orders() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
-              <tr key={order._id}>
-                <td>{order.orderDate}</td>
-                <td>{order.productName}</td>
-                <td>{order.address}</td>
-                <td>{order.phone}</td>
-                <td>{order.email}</td>
-                <td
-                  id={
-                    order.orderStatus === "Pending"
-                      ? "order_pending"
-                      : order.orderStatus === "Approved"
-                      ? "order_approved"
-                      : "order_rejected"
-                  }
-                >
-                  {order.orderStatus}
-                </td>
-                <td>
-                  <button
-                    onClick={() => handleDeleteOrder(order._id)}
-                    className="delete-btn"
+            {orders
+              .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+              .map((order) => (
+                <tr key={order._id}>
+                  <td>{order.orderDate}</td>
+                  <td>{order.productName}</td>
+                  <td>{order.address}</td>
+                  <td>{order.phone}</td>
+                  <td>{order.email}</td>
+                  <td
+                    id={
+                      order.orderStatus === "Pending"
+                        ? "order_pending"
+                        : order.orderStatus === "Approved"
+                        ? "order_approved"
+                        : "order_rejected"
+                    }
                   >
-                    DELETE
-                  </button>
-                  <Link to={`/update-order/${order._id}`}>
-                    <button className="edit-btn">Detail</button>
-                  </Link>
-                </td>
-              </tr>
-            ))}
+                    {order.orderStatus}
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDeleteOrder(order._id)}
+                      className="delete-btn"
+                    >
+                      DELETE
+                    </button>
+                    <Link to={`/update-order/${order._id}`}>
+                      <button className="edit-btn">Detail</button>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

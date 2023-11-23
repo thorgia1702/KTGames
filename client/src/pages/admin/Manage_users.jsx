@@ -97,6 +97,7 @@ export default function Manage_users() {
         </div>
         {users
           .filter((user) => user.username !== "admin")
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .map((user) => (
             <div key={user._id} className="item-card">
               <img src={user.avatar} alt="item image" className="item-image" />

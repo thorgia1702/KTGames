@@ -29,7 +29,28 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [showOrdersError, setShowOrdersError] = useState(false);
   const dispatch = useDispatch();
+
+  const showOrders = async () => {
+    try {
+      setShowOrdersError(false);
+      const res = await fetch("api/order/orders");
+      const data = await res.json();
+      if (data.success === false) {
+        setShowOrdersError(true);
+        return;
+      }
+      setOrders(data);
+    } catch (error) {
+      setShowOrdersError(true);
+    }
+  };
+
+  useEffect(() => {
+    showOrders();
+  }, []);
 
   const showModal = () => {
     setOpen(true);
@@ -175,6 +196,40 @@ export default function Profile() {
         <Button className="edit_btn" onClick={showModal}>
           EDIT PROFILE
         </Button>
+
+        <div className="list-of-orders" id="profile">
+          <table>
+            <thead>
+              <tr>
+                <th>Order Date</th>
+                <th>Product name</th>
+                <th>Order Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {orders
+                .filter((order) => order.userId === currentUser._id) // Filter orders by userId
+                .map((order) => (
+                  <tr key={order._id}>
+                    <td>{order.orderDate}</td>
+                    <td>{order.productName}</td>
+                    <td
+                      id={
+                        order.orderStatus === "Pending"
+                          ? "user_order_pending"
+                          : order.orderStatus === "Approved"
+                          ? "user_order_approved"
+                          : "user_order_rejected"
+                      }
+                    >
+                      {order.orderStatus}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+
         <Modal
           open={open}
           title="EDIT PROFILE"

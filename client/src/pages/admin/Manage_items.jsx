@@ -337,29 +337,31 @@ export default function Profile() {
           <p className="item-description">Description</p>
           <p className="item-name">ㅤㅤAction</p>
         </div>
-        {items.map((item) => (
-          <div key={item._id} className="item-card">
-            <img
-              src={item.imageUrls[0]}
-              alt="item image"
-              className="item-image"
-            />
-            <p className="item-name">{item.name}</p>
-            <p className="item-name">{item.point}</p>
-            <p className="item-description">{item.description}</p>
-            <div className="btn">
-              <button
-                onClick={() => handleDeleteItem(item._id)}
-                className="delete-btn"
-              >
-                DELETE
-              </button>
-              <Link to={`/update-item/${item._id}`}>
-                <button className="edit-btn">EDIT</button>
-              </Link>
+        {items
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .map((item) => (
+            <div key={item._id} className="item-card">
+              <img
+                src={item.imageUrls[0]}
+                alt="item image"
+                className="item-image"
+              />
+              <p className="item-name">{item.name}</p>
+              <p className="item-name">{item.point}</p>
+              <p className="item-description">{item.description}</p>
+              <div className="btn">
+                <button
+                  onClick={() => handleDeleteItem(item._id)}
+                  className="delete-btn"
+                >
+                  DELETE
+                </button>
+                <Link to={`/update-item/${item._id}`}>
+                  <button className="edit-btn">EDIT</button>
+                </Link>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
       {/* Delete Confirmation Modal */}
       <Modal

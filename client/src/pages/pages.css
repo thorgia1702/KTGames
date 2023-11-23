@@ -202,7 +202,7 @@ hr {
 }
 
 .profile-page {
-  max-width: 600px;
+  max-width: 850px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -478,4 +478,23 @@ hr {
   width: 400px;
   height: 50px;
   margin-left: 100px;
+}
+
+.list-of-orders td#user_order_pending {
+  font-size: 28px;
+  color: rgb(255, 0, 0);
+}
+
+.list-of-orders td#user_order_approved {
+  font-size: 28px;
+  color: rgb(47, 255, 0);
+}
+
+.list-of-orders td#user_order_rejected {
+  font-size: 28px;
+  color: rgb(0, 98, 255);
+}
+
+.list-of-orders#profile{
+  margin-top: 30px;
 }
