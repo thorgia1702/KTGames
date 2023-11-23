@@ -27,7 +27,7 @@ export default function Update_item() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [items, setItems] = useState([]);
+  
 
   const [open, setOpen] = useState(false);
 

@@ -31,7 +31,7 @@ export default function UpdateUser() {
     avatar: "",
     trophy: 0,
     ktpoint: 0,
-    phone: 1234567890,
+    phone: "",
     role: "",
     password: "",
     status: "",
@@ -60,6 +60,7 @@ export default function UpdateUser() {
     setOpen(false);
     navigate("/users");
   };
+
   useEffect(() => {
     if (file) {
       handleFileUpload(file);
@@ -88,9 +89,11 @@ export default function UpdateUser() {
       }
     );
   };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
   useEffect(() => {
     const fetchUser = async () => {
       const userId = params.userId;
@@ -104,9 +107,11 @@ export default function UpdateUser() {
     };
     fetchUser();
   }, []);
+
   useEffect(() => {
     showModal();
   }, []);
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!/^\d{10}$/.test(formData.phone)) {
@@ -153,7 +158,8 @@ export default function UpdateUser() {
         description: error.message,
       });
     }
-  };
+  }; 
+
   return (
     <div className="profile-actions">
       <Modal

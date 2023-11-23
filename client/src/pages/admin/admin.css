@@ -253,3 +253,15 @@ textarea {
         margin-bottom: 10px;
     }
 }
+
+
+.order_information{
+    font-size: 25px;
+}
+
+.order_status{
+    width: 500px;
+    height: 50px;
+    font-size: 25px;
+    margin-bottom: 30px;
+}
