@@ -13,7 +13,6 @@ import {
 } from "../../redux/user/userSlice";
 
 export default function Bingo() {
-  const [isGameOver, setIsGameOver] = useState(false);
   const dispatch = useDispatch();
   const [roomId, setRoomId] = useState(null);
   const { appSocket } = useSocket();
@@ -46,8 +45,6 @@ export default function Bingo() {
 
   useEffect(() => {
     if (!appSocket) return;
-
-    setIsGameOver(false);
     appSocket.on("startGame", async (gameData) => {
       if (gameData.gameType !== "bingo") return;
       setBoard(gameData.board); // Set the board directly from the game data
@@ -99,7 +96,6 @@ export default function Bingo() {
             } else {
               dispatch(updateUserSuccess(data));
               setIsWinnerModalVisible(true);
-              setIsGameOver(true);
             }
           })
           .catch((error) => {
@@ -107,11 +103,9 @@ export default function Bingo() {
           });
       } else {
         setGameOutcome("lose");
-        setIsGameOver(true);
       }
       setIsWinnerModalVisible(true);
       setIsGameActive(false);
-      setIsGameOver(true);
     });
 
     appSocket.on("gameUpdate", (newBoard) => {
@@ -123,18 +117,16 @@ export default function Bingo() {
     });
 
     appSocket.on("playerDisconnected", () => {
-      if (!gameOver) {
-        setIsGameActive(false);
-        Modal.info({
-          title: "Player Disconnected",
-          centered: true,
-          content: "Your opponent has disconnected. The game will end now.",
-          onOk() {
-            setIsConnecting(false);
-            setOpponentId(null);
-          },
-        });
-      }
+      setIsGameActive(false);
+      Modal.info({
+        title: "Player Disconnected",
+        centered: true,
+        content: "Your opponent has disconnected. The game will end now.",
+        onOk() {
+          setIsConnecting(false);
+          setOpponentId(null);
+        },
+      });
     });
 
     // Cleanup on component unmount
