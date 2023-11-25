@@ -81,6 +81,8 @@ export function calculateWinner_bingo(cells) {
     }
   }
 
-  return completeLines; // Returns the count of complete lines
+  return completeLines;
 }
+
+
 

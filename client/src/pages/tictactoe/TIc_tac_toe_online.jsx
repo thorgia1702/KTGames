@@ -71,7 +71,7 @@ export default function Tic_tac_toe_online() {
 
     appSocket.on("startGame", async (data) => {
       const { roomId, players, gameType } = data;
-      if (gameType !== "tic-tac-toe") return; // Guard clause for game type
+      if (gameType !== "tic-tac-toe") return;
 
       const opponentId = players.find(
         (playerId) => playerId !== currentUser._id

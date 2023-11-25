@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import "./bingo.css";
 import { Button, Modal } from "antd";
 import BingoBoard from "./Bingo_board";
-import { calculateWinner_bingo } from "../../game_logics";
 import { useDispatch, useSelector } from "react-redux";
 import Searching from "../../images/loop2.gif";
 import { useSocket } from "../../helpers/socket.io/index";
@@ -14,6 +13,7 @@ import {
 } from "../../redux/user/userSlice";
 
 export default function Bingo() {
+  const [isGameOver, setIsGameOver] = useState(false);
   const dispatch = useDispatch();
   const [roomId, setRoomId] = useState(null);
   const { appSocket } = useSocket();
@@ -47,9 +47,9 @@ export default function Bingo() {
   useEffect(() => {
     if (!appSocket) return;
 
+    setIsGameOver(false);
     appSocket.on("startGame", async (gameData) => {
       if (gameData.gameType !== "bingo") return;
-
       setBoard(gameData.board); // Set the board directly from the game data
       setIsBoardLoaded(true);
       setIsPlayerTurn(gameData.players[0] === currentUser._id);
@@ -99,6 +99,7 @@ export default function Bingo() {
             } else {
               dispatch(updateUserSuccess(data));
               setIsWinnerModalVisible(true);
+              setIsGameOver(true);
             }
           })
           .catch((error) => {
@@ -106,9 +107,11 @@ export default function Bingo() {
           });
       } else {
         setGameOutcome("lose");
+        setIsGameOver(true);
       }
       setIsWinnerModalVisible(true);
       setIsGameActive(false);
+      setIsGameOver(true);
     });
 
     appSocket.on("gameUpdate", (newBoard) => {
@@ -120,16 +123,18 @@ export default function Bingo() {
     });
 
     appSocket.on("playerDisconnected", () => {
-      setIsGameActive(false);
-      Modal.info({
-        title: "Player Disconnected",
-        centered: true,
-        content: "Your opponent has disconnected. The game will end now.",
-        onOk() {
-          setIsConnecting(false);
-          setOpponentId(null);
-        },
-      });
+      if (!gameOver) {
+        setIsGameActive(false);
+        Modal.info({
+          title: "Player Disconnected",
+          centered: true,
+          content: "Your opponent has disconnected. The game will end now.",
+          onOk() {
+            setIsConnecting(false);
+            setOpponentId(null);
+          },
+        });
+      }
     });
 
     // Cleanup on component unmount
@@ -151,6 +156,7 @@ export default function Bingo() {
       // The server will handle the state and emit an "updateTurn" event.
     }
   };
+
   const handleNewMatchClick = () => {
     window.location.reload();
   };

@@ -14,7 +14,6 @@ export default function initSocketIo(httpServer) {
   let waitingPlayersBingo = [];
 
   io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
     function createBingoBoard() {
       // Initialize a 5x5 Bingo board
       let board = Array.from({ length: 25 }, (_, i) => ({
@@ -81,7 +80,6 @@ export default function initSocketIo(httpServer) {
           ],
           currentPlayer: 0,
           gameType: gameType,
-          // Specific game states can be added here e.g. board for Tic Tac Toe or bingoBoard for Bingo
         });
 
         waitingPlayer.socket.roomId = roomId;
@@ -94,7 +92,6 @@ export default function initSocketIo(httpServer) {
           roomId: roomId,
           players: [waitingPlayer.playerId, playerId],
           gameType: gameType,
-          // Include any game-specific state you need to initialize
         });
 
         if (gameType === "bingo") {
@@ -119,7 +116,6 @@ export default function initSocketIo(httpServer) {
           });
         }
 
-        // If it's a turn-based game, notify players whose turn it is
         if (gameType === "tic-tac-toe" || gameType === "bingo") {
           const startingPlayerId =
             rooms.get(roomId).players[rooms.get(roomId).currentPlayer].playerId;
@@ -194,14 +190,12 @@ export default function initSocketIo(httpServer) {
             const winnerLines = calculateWinner_bingo(markedBoard);
 
             if (winnerLines >= 5) {
-              // Notify all clients in the room that this player has won
+              // Notify all players in the room that this player has won
               io.to(socket.roomId).emit("gameWon", {
                 winnerId: room.players[index].playerId,
               });
-              // Perform any other cleanup or state updates as necessary
             }
           });
-
           // Update the current player
           room.currentPlayer = (currentPlayerIndex + 1) % room.players.length;
           io.to(socket.roomId).emit("updateTurn", {
