@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { errorHandler } from "./error.js";
-import User from "../models/user.model.js"; // Import your User model
+import User from "../models/user.model.js";
 
 export const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token;
@@ -16,10 +16,9 @@ export const verifyToken = (req, res, next) => {
         return next(errorHandler(404, "User not found"));
       }
 
-      // Extend the req.user object with the fetched role
       req.user = {
         ...user,
-        role: userData.role, // Assuming 'role' is a property in your User model
+        role: userData.role,
       };
 
       next();
@@ -28,3 +27,4 @@ export const verifyToken = (req, res, next) => {
     }
   });
 };
+

@@ -226,6 +226,12 @@ export default function Header() {
                 className="sidebar_avatar"
               />
               <p>{currentUser.username}</p>
+              <p>
+                KT Points: {currentUser.ktpoint}
+              </p>
+              <p>
+                Trophies: {currentUser.trophy}
+              </p>
               <Link to="/profile">
                 <button className="sign-out">Profile</button>
               </Link>
