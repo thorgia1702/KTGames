@@ -187,7 +187,9 @@ export default function Header() {
           </p>
         </div>
       ) : (
-        <></>
+        <p className="user_info_header_text">
+            Guest ㅤ
+          </p>
       )}
       {/* Unfold Button for Navigation Sidebar (Outside Sidebar) */}
       <div className="profile-unfold-button" onClick={toggleProfileSidebar}>

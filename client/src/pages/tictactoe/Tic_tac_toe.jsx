@@ -2,16 +2,28 @@ import React from "react";
 import "./tictactoe.css";
 
 export default function Tic_tac_toe() {
+  const navigate = (path) => {
+    window.location.href = path;
+  };
+
   return (
     <div>
       <h1>Tic Tac Toe</h1>
       <div className="btn-ctn">
-        <a href="/tic-tac-toe-offline">
-          <button className="navbutton" id="tic-tac-toe">Play Local</button>
-        </a>
-        <a href="/tic-tac-toe-online">
-          <button className="navbutton" id="tic-tac-toe">Play Online</button>
-        </a>
+        <button
+          className="navbutton"
+          id="tic-tac-toe"
+          onClick={() => navigate("/tic-tac-toe-offline")}
+        >
+          Play Local
+        </button>
+        <button
+          className="navbutton"
+          id="tic-tac-toe-online"
+          onClick={() => navigate("/tic-tac-toe-online")}
+        >
+          Play Online
+        </button>
       </div>
     </div>
   );

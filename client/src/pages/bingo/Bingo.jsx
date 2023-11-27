@@ -189,6 +189,7 @@ export default function Bingo() {
       <Modal
         title={gameOutcome === "win" ? "Winner" : "Game Over"}
         open={isWinnerModalVisible}
+        centered
         onCancel={() => setIsWinnerModalVisible(false)}
         footer={[]}
       >

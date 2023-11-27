@@ -29,8 +29,8 @@ export default function UpdateUser() {
     username: "",
     email: "",
     avatar: "",
-    trophy: 0,
-    ktpoint: 0,
+    trophy: "",
+    ktpoint: "",
     phone: "",
     role: "",
     password: "",
@@ -111,9 +111,22 @@ export default function UpdateUser() {
   useEffect(() => {
     showModal();
   }, []);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !formData.username ||
+      !formData.email ||
+      !formData.password ||
+      !formData.trophy ||
+      !formData.ktpoint
+    ) {
+      notification.error({
+        message: "Incomplete Information",
+        description: "Please fill in all required fields.",
+      });
+      return;
+    }
     if (!/^\d{10}$/.test(formData.phone)) {
       notification.error({
         message: "Error",
@@ -158,7 +171,7 @@ export default function UpdateUser() {
         description: error.message,
       });
     }
-  }; 
+  };
 
   return (
     <div className="profile-actions">
@@ -229,7 +242,7 @@ export default function UpdateUser() {
             <p>Trophy:</p>
             <input
               type="number"
-              placeholder="Phone"
+              placeholder="Trophy"
               value={formData.trophy}
               className="edit-text"
               id="trophy"
@@ -239,7 +252,7 @@ export default function UpdateUser() {
             <p>Kt Point:</p>
             <input
               type="number"
-              placeholder="Phone"
+              placeholder="Kt Point"
               value={formData.ktpoint}
               className="edit-text"
               id="ktpoint"

@@ -41,7 +41,10 @@ export default function Leaderboard() {
             Trophies
           </p>
         </div>
-        {leaderboardUsers.map((user, index) => (
+        {leaderboardUsers
+        .filter((user) => user.role !== "admin")
+        .filter((user) => user.status !== "banned")
+        .map((user, index) => (
           <div
             key={user._id}
             className={

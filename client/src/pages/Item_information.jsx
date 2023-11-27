@@ -275,7 +275,7 @@ export default function Item_information() {
         <p>Phone:</p>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Phone number"
           defaultValue={currentUser.phone}
           className="edit-text"
           id="phone"
@@ -284,7 +284,7 @@ export default function Item_information() {
         <p>Email:</p>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Email"
           defaultValue={currentUser.email}
           className="edit-text"
           id="email"

@@ -110,6 +110,14 @@ export default function Profile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!formData.username || !formData.email || !formData.password) {
+      notification.error({
+        message: "Incomplete Information",
+        description: "Please fill in all required fields.",
+      });
+      return;
+    }
+    e.preventDefault();
     let payload = { ...formData };
     // Check if password change is intended
     if (showPassword) {
@@ -124,6 +132,7 @@ export default function Profile() {
       // Remove password from payload if not changing
       delete payload.password;
     }
+
     if (!/^\d{10}$/.test(payload.phone)) {
       notification.error({
         message: "Error",

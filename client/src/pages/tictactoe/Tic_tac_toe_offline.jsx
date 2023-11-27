@@ -33,7 +33,7 @@ export default function Tic_tac_toe_offline() {
 
   return (
     <div>
-      <h1>Tic Tac Toe</h1>
+      <h1>Tic Tac Toe Local Mode</h1>
       <div className="ctn">
         <div></div>
         <div className="game-container">
