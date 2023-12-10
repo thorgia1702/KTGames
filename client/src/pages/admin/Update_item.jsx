@@ -27,7 +27,6 @@ export default function Update_item() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  
 
   const [open, setOpen] = useState(false);
 
@@ -186,6 +185,7 @@ export default function Update_item() {
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
+        navigate("/items");
         return;
       }
       setFormData(data);

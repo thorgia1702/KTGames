@@ -101,6 +101,7 @@ export default function UpdateUser() {
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
+        navigate("/users");
         return;
       }
       setFormData(data);

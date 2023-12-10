@@ -56,6 +56,7 @@ export default function Update_order() {
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
+        navigate("/orders");
         return;
       }
       setFormData(data);

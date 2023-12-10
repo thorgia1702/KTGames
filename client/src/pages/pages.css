@@ -398,16 +398,16 @@ hr {
   border: #646cff 1px solid;
 }
 
-.item-img{
+.item-img {
   height: 290px;
   width: 299px;
 }
 
-.item-info{
+.item-info {
   text-align: center;
 }
 
-.item-info#name{
+.item-info#name {
   text-transform: capitalize;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -415,65 +415,66 @@ hr {
   color: #ffffff;
 }
 
-.item-info#point{
+.item-info#point {
   margin-top: 0px;
   text-align: center;
   font-size: 25px;
   color: white;
 }
 
-.img-ctn{
+.img-ctn {
   margin-top: 50px;
 
 }
-.img{
+
+.img {
   width: 300px;
   height: 300px;
 }
 
-.item-inform{
+.item-inform {
   display: flex;
 }
 
-.in4-ctn{
+.in4-ctn {
   margin-left: 50px;
 }
 
-.item-in4{
+.item-in4 {
   font-size: 24px;
   margin-bottom: 0px;
 }
 
-.item-in4#name{
+.item-in4#name {
   margin-top: 0px;
   font-size: 22px;
 }
 
-.item-in4#description{
+.item-in4#description {
   margin-top: 0px;
   font-size: 22px;
 }
 
-.item-in4#point{
+.item-in4#point {
   margin-bottom: 0px;
 }
 
-.item-in4#user-point{
+.item-in4#user-point {
   margin-top: 5px;
 }
 
-.item-in4#after-point{
+.item-in4#after-point {
   margin-top: 5px;
   margin-bottom: 30px;
 }
 
-.order-btn{
+.order-btn {
   width: 400px;
   height: 50px;
   margin-left: 70px;
 }
 
-.order_button{
+.order_button {
   margin-top: 50px;
   width: 400px;
   height: 50px;
@@ -495,6 +496,51 @@ hr {
   color: rgb(0, 98, 255);
 }
 
-.list-of-orders#profile{
+.list-of-orders#profile {
   margin-top: 30px;
+}
+
+.not_found {
+  font-size: 150px;
+  margin-top: 50px;
+  margin-bottom: 0px;
+}
+
+.not_found_message {
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.not_found_message#h2{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 55px;
+}
+
+.not_found_message#h3{
+  font-size: 23px;
+}
+
+.back_to_home {
+  width: 300px;
+  height: 80px;
+  font-size: 25px;
+  background-color: #000000;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+
+}
+
+.back_to_home_link{
+  width: 300px;
+  height: 80px;
+  font-size: 25px;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

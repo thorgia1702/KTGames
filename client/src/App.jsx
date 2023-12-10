@@ -23,7 +23,7 @@ import Update_user from "./pages/admin/Update_user";
 import Item_information from "./pages/Item_information";
 import ScrollToTop from "./Scroll_To_Top";
 import Update_order from "./pages/admin/Update_order";
-
+import Not_Found from "./pages/NotFound";
 export default function App() {
   return (
     <BrowserRouter>
@@ -42,6 +42,7 @@ export default function App() {
             element={<Tic_tac_toe_offline />}
           />
           <Route path="/ktshop" element={<Ktshop />} />
+          <Route path="/*" element={<Not_Found />} />
 
           <Route element={<PrivateRoute />}>
             <Route

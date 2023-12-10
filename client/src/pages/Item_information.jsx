@@ -55,6 +55,7 @@ export default function Item_information() {
       const data = await res.json();
       if (data.success === false) {
         console.log(data.message);
+        navigate("/ktshop");
         return;
       }
       setFormData(data);
