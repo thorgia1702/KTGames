@@ -54,7 +54,6 @@ export function calculateWinner_tictactoe(cells) {
   return null;
 }
 
-
 export function calculateWinner_bingo(cells) {
   const lines = [
     [0, 1, 2, 3, 4],
@@ -76,13 +75,16 @@ export function calculateWinner_bingo(cells) {
   for (let i = 0; i < lines.length; i++) {
     const [a, b, c, d, e] = lines[i];
     // Check if all cells in a line are marked with "X"
-    if (cells[a] === "X" && cells[b] === "X" && cells[c] === "X" && cells[d] === "X" && cells[e] === "X") {
+    if (
+      cells[a] === "X" &&
+      cells[b] === "X" &&
+      cells[c] === "X" &&
+      cells[d] === "X" &&
+      cells[e] === "X"
+    ) {
       completeLines += 1;
     }
   }
 
   return completeLines;
 }
-
-
-

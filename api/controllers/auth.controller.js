@@ -86,12 +86,11 @@ export const createDefaultAdmin = async () => {
       return;
     }
 
-    // Create a new admin account
     const adminData = {
-      username: "admin",  // Set the admin username
-      email: "admin@gmail.com",  // Set the admin email
-      password: "12345678", // Set the admin password (hashed using bcrypt)
-      role: "admin",  // Set the role to 'admin'
+      username: "admin",
+      email: "admin@gmail.com",
+      password: "12345678",
+      role: "admin",
     };
 
     const hashedPassword = bcryptjs.hashSync(adminData.password, 10);

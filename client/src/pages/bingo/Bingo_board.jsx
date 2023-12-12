@@ -15,7 +15,7 @@ export default function Bingo_board({ cells, onCellClick }) {
           />
         ))
       ) : (
-        <p>Loading board...</p> // You can style this message or add a spinner, etc.
+        <p>Loading board...</p>
       )}
     </div>
   );
